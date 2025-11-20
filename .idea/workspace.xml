@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="1614f22e-7a5e-4e9b-aa48-d929013fc378" name="Changes" comment="commit start">
       <change beforePath="$PROJECT_DIR$/PyDashMain.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyDashMain.py" afterDir="false" />
