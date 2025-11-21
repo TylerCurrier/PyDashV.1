@@ -1,34 +1,36 @@
-#!/usr/bin/env python3
-"""
-Motorcycle Dash Display for Raspberry Pi
-GUI + Screen Switching + CAN + Arduino IMU
-Background images added for each screen.
-"""
+# PyDashMain V1.0
+# Tyler Currier
+# November 21, 2025
 
+#Libraries
 import time
 import pygame
 import serial
 import can
 
 # ============================================================
-#                  USER SETTINGS (EDIT THESE)
+#                  USER SETTINGS
 # ============================================================
 
+#startup screen
 SPLASH_IMAGE = "splash.jpg"
 
-# Background images for screens:
-BG_SCREEN1 = "bg1.jpg"
-BG_SCREEN2 = "bg2.jpg"
+# Backgrounds for each screen
+BG_MAIN = "bg_main.jpg"
+BG_TRAIL = "bg_trail.jpg"
+BG_LEAN = "bg_lean.jpg"
+BG_ENGMAG = "bg_engmag.jpg"
 
+#port definition for serial connection to ard nano sensors
 SERIAL_PORT = "/dev/ttyUSB0"
 SERIAL_BAUD = 115200
 
+#channel defenisition car Can Hat input
 CAN_CHANNEL = "can0"
 CAN_BITRATE = 500000
-
 FPS = 30
 
-# Replace with real CAN IDs from your bike:
+# CAN IDs
 CAN_ID_RPM = 0x100
 CAN_ID_SPEED = 0x101
 CAN_ID_GEAR = 0x102
@@ -37,9 +39,10 @@ CAN_ID_IAT = 0x104
 CAN_ID_TPS = 0x105
 
 # ============================================================
-#               GLOBAL VARIABLES (Display Data)
+#               GLOBAL DATA
 # ============================================================
 
+#variable setup for usable daya
 rpm = 0
 speed = 0
 gear = 0
@@ -50,8 +53,10 @@ tps = 0
 imu_data = {"ax": 0, "ay": 0, "az": 0, "gx": 0, "gy": 0, "gz": 0,
             "mx": 0, "my": 0, "mz": 0, "brake": 0}
 
+#!!!!!!!!!!!!!!! Will need to add a fusion algorithm to compute lean angle (likely madgwick filter) on BNO055 IMU 9 axis
+
 # ============================================================
-#                    CAN INITIALIZATION
+#                    CAN FUNCTIONS
 # ============================================================
 
 def init_can():
@@ -85,7 +90,7 @@ def process_can_frame(msg):
         tps = msg.data[0]
 
 # ============================================================
-#             ARDUINO IMU + BRAKE PRESSURE READING
+#                SERIAL / IMU FUNCTIONS
 # ============================================================
 
 def init_serial():
@@ -124,37 +129,41 @@ def read_serial(ser):
         pass
 
 # ============================================================
-#                    PYGAME INITIALIZATION
+#                    PYGAME INIT
 # ============================================================
 
 pygame.init()
 screen = pygame.display.set_mode((800, 480))
-pygame.display.set_caption("PyDash V.1")
+pygame.display.set_caption("PyDash V.2  (4 Screens)")
 clock = pygame.time.Clock()
 
-font_big = pygame.font.SysFont("Arial", 60)
-font_small = pygame.font.SysFont("Arial", 40)
+font_big = pygame.font.SysFont("Arial", 120)
+font_small = pygame.font.SysFont("Arial", 60)
+font_1 = pygame.font.SysFont("Arial", 40)
+font_2 = pygame.font.SysFont("Arial", 60)
+font_3 = pygame.font.SysFont("Arial", 80)
+font_4 = pygame.font.SysFont("Arial", 100)
+font_5 = pygame.font.SysFont("Arial", 120)
 
 # ============================================================
-#                   LOAD BACKGROUND IMAGES
+#                  LOAD BACKGROUND IMAGES
 # ============================================================
 
-try:
-    bg1 = pygame.image.load(BG_SCREEN1).convert()
-    bg1 = pygame.transform.scale(bg1, (800, 480))
-except:
-    print("[WARNING] Missing bg1.jpg")
-    bg1 = None
+def load_bg(path):
+    try:
+        img = pygame.image.load(path).convert()
+        return pygame.transform.scale(img, (800, 480))
+    except:
+        print(f"[WARNING] Missing {path}")
+        return None
 
-try:
-    bg2 = pygame.image.load(BG_SCREEN2).convert()
-    bg2 = pygame.transform.scale(bg2, (800, 480))
-except:
-    print("[WARNING] Missing bg2.jpg")
-    bg2 = None
+bg_main = load_bg(BG_MAIN)
+bg_trail = load_bg(BG_TRAIL)
+bg_lean = load_bg(BG_LEAN)
+bg_engmag = load_bg(BG_ENGMAG)
 
 # ============================================================
-#                       SPLASH SCREEN
+#                      SPLASH
 # ============================================================
 
 def show_splash():
@@ -168,39 +177,57 @@ def show_splash():
         print("[SPLASH] Missing image.")
 
 # ============================================================
-#                     SCREEN 1 (Main Dash)
+#                      SCREEN 1: MAIN
 # ============================================================
 
 def screen_1():
-    if bg1:
-        screen.blit(bg1, (0, 0))
-    else:
-        screen.fill((0, 0, 0))
+    if bg_main: screen.blit(bg_main, (0, 0))
+    else: screen.fill((0, 0, 0))
 
-    screen.blit(font_big.render(f"RPM: {rpm}", True, (255, 255, 255)), (50, 50))
-    screen.blit(font_big.render(f"Speed: {speed}", True, (255, 255, 255)), (50, 150))
-    screen.blit(font_big.render(f"Gear: {gear}", True, (255, 255, 255)), (50, 250))
-
-    screen.blit(font_small.render(f"Coolant: {coolant}C", True, (220, 220, 220)), (50, 350))
-    screen.blit(font_small.render(f"IAT: {iat}C   TPS: {tps}%", True, (220, 220, 220)), (50, 420))
+    screen.blit(font_4.render(f"RPM: {rpm}", True, (0, 0, 0)), (50, 50))
+    screen.blit(font_4.render(f"{speed} ", True, (0, 0, 0)), (300, 180))
+    screen.blit(font_4.render(f" mph", True, (0, 0, 0)), (380, 180))
+    screen.blit(font_5.render(f"{gear}", True, (0, 0, 0)), (50, 170))
+    screen.blit(font_small.render(f"{coolant} C ", True, (0, 0, 0)), (30, 385))
 
 # ============================================================
-#                     SCREEN 2 (IMU Display)
+#                      SCREEN 2: TRAIL
 # ============================================================
 
 def screen_2():
-    if bg2:
-        screen.blit(bg2, (0, 0))
-    else:
-        screen.fill((30, 30, 30))
+    if bg_trail: screen.blit(bg_trail, (0, 0))
+    else: screen.fill((20, 20, 20))
 
-    screen.blit(font_big.render("IMU DATA", True, (255, 255, 0)), (300, 50))
+    screen.blit(font_big.render("TRAIL DATA", True, (255, 200, 0)), (250, 40))
+    screen.blit(font_small.render(f"Speed: {speed}", True, (255, 255, 255)), (50, 200))
+    screen.blit(font_small.render(f"Brake PSI: {imu_data['brake']:.1f}", True, (255, 180, 180)), (50, 260))
 
+# ============================================================
+#                      SCREEN 3: LEAN
+# ============================================================
+
+def screen_3():
+    if bg_lean: screen.blit(bg_lean, (0, 0))
+    else: screen.fill((40, 0, 40))
+
+    screen.blit(font_big.render("LEAN ANGLE", True, (0, 255, 255)), (250, 40))
     screen.blit(font_small.render(f"AX: {imu_data['ax']:.2f}", True, (255, 255, 255)), (50, 200))
     screen.blit(font_small.render(f"AY: {imu_data['ay']:.2f}", True, (255, 255, 255)), (50, 260))
-    screen.blit(font_small.render(f"AZ: {imu_data['az']:.2f}", True, (255, 255, 255)), (50, 320))
+    screen.blit(font_small.render(f"GY: {imu_data['gy']:.2f}", True, (255, 255, 255)), (50, 320))
 
-    screen.blit(font_small.render(f"Brake: {imu_data['brake']:.1f} PSI", True, (255, 100, 100)), (50, 400))
+# ============================================================
+#                      SCREEN 4: ENGINE MAG
+# ============================================================
+
+def screen_4():
+    if bg_engmag: screen.blit(bg_engmag, (0, 0))
+    else: screen.fill((0, 30, 60))
+
+    screen.blit(font_big.render("ENGINE MAG", True, (255, 255, 0)), (240, 40))
+
+    screen.blit(font_small.render(f"Mag X: {imu_data['mx']:.2f}", True, (255, 255, 255)), (50, 200))
+    screen.blit(font_small.render(f"Mag Y: {imu_data['my']:.2f}", True, (255, 255, 255)), (50, 260))
+    screen.blit(font_small.render(f"Mag Z: {imu_data['mz']:.2f}", True, (255, 255, 255)), (50, 320))
 
 # ============================================================
 #                         MAIN LOOP
@@ -216,31 +243,39 @@ def main():
     running = True
 
     while running:
+        # EVENTS
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
-            # Keyboard screen switching
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT:
-                    current_screen = 2
+                    current_screen += 1
+                    if current_screen > 4:
+                        current_screen = 1
                 if event.key == pygame.K_LEFT:
-                    current_screen = 1
+                    current_screen -= 1
+                    if current_screen < 1:
+                        current_screen = 4
 
-        # CAN frames
+        # CAN DATA
         if bus:
             msg = bus.recv(timeout=0.01)
             if msg:
                 process_can_frame(msg)
 
-        # Arduino IMU
+        # IMU DATA
         read_serial(ser)
 
-        # Draw current screen
+        # DRAW SCREEN
         if current_screen == 1:
             screen_1()
         elif current_screen == 2:
             screen_2()
+        elif current_screen == 3:
+            screen_3()
+        elif current_screen == 4:
+            screen_4()
 
         pygame.display.update()
         clock.tick(FPS)
