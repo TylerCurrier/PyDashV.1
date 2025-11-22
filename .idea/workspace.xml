@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1614f22e-7a5e-4e9b-aa48-d929013fc378" name="Changes" comment="commit next">
+      <change afterPath="$PROJECT_DIR$/SerialTest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PyDashMain.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyDashMain.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -46,6 +47,7 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Python.PyDashMain.executor": "Run",
+    "Python.SerialTest.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -73,7 +75,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1763670105247</updated>
-      <workItem from="1763670106411" duration="9297000" />
+      <workItem from="1763670106411" duration="14130000" />
     </task>
     <task id="LOCAL-00001" summary="commit start">
       <option name="closed" value="true" />
@@ -131,7 +133,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763743489075</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="commit next">
+      <option name="closed" value="true" />
+      <created>1763751786715</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1763751786715</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -143,6 +153,7 @@
     <option name="LAST_COMMIT_MESSAGE" value="commit next" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/PyDashV_1$PyDashMain.coverage" NAME="PyDashMain Coverage Results" MODIFIED="1763751434356" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PyDashV_1$SerialTest.coverage" NAME="SerialTest Coverage Results" MODIFIED="1763767535513" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PyDashV_1$PyDashMain.coverage" NAME="PyDashMain Coverage Results" MODIFIED="1763769694156" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
