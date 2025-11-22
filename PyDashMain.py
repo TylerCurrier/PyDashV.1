@@ -2,6 +2,8 @@
 # PyDashMain V2.1 – FULL VERSION
 # Tyler Currier
 
+#remain to focus on ui design and cases, until break when data can be parsed correctly.
+
 import time
 import pygame
 import serial
