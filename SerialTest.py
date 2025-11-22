@@ -1,3 +1,5 @@
+#use this to probe for a serial input from the arduino
+
 import serial, time
 
 try:

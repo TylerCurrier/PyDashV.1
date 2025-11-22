@@ -6,6 +6,7 @@ import time
 import pygame
 import serial
 import can
+import math
 
 # ============================================================
 #              SELECT INPUT MODE ("REAL" or "FAKE")
@@ -14,7 +15,6 @@ import can
 INPUT_MODE = "FAKE"  # <-- CHANGE THIS ONE VARIABLE
 # "REAL" = CAN + Arduino
 # "FAKE" = Arduino only (fake data)
-
 
 # ============================================================
 #                  USER SETTINGS
@@ -26,7 +26,7 @@ BG_TRAIL = "bg_trail.jpg"
 BG_LEAN = "bg_lean.jpg"
 BG_ENGMAG = "bg_engmag.jpg"
 
-SERIAL_PORT = "COM6"  #This port will need to be change to a different format when used on a LINUX os
+SERIAL_PORT = "COM6"  # This will change on Linux
 SERIAL_BAUD = 115200
 
 CAN_CHANNEL = "can0"
@@ -45,6 +45,7 @@ CAN_ID_TPS = 0x105
 #               GLOBAL DATA VARIABLES
 # ============================================================
 
+# CAN variables
 rpm = 0
 speed = 0
 gear = 0
@@ -52,6 +53,7 @@ coolant = 0
 iat = 0
 tps = 0
 
+# IMU / Arduino variables
 imu_data = {
     "ax": 0, "ay": 0, "az": 0,
     "gx": 0, "gy": 0, "gz": 0,
@@ -61,16 +63,19 @@ imu_data = {
     "pitch": 0
 }
 
+# Filter globals
+lean_filtered = 0
+pitch_filtered = 0
+prev_time = None
 
 # ============================================================
-#                    CAN FUNCTIONS
+#               CAN FUNCTIONS
 # ============================================================
 
 def init_can():
     if INPUT_MODE == "FAKE":
         print("[CAN] FAKE MODE – CAN Disabled")
         return None
-
     try:
         bus = can.interface.Bus(channel=CAN_CHANNEL, bustype='socketcan')
         print("[CAN] Connected.")
@@ -82,25 +87,18 @@ def init_can():
 
 def process_can_frame(msg):
     global rpm, speed, gear, coolant, iat, tps
-
     if msg.arbitration_id == CAN_ID_RPM:
         rpm = (msg.data[0] << 8) | msg.data[1]
-
     elif msg.arbitration_id == CAN_ID_SPEED:
         speed = msg.data[0]
-
     elif msg.arbitration_id == CAN_ID_GEAR:
         gear = msg.data[0]
-
     elif msg.arbitration_id == CAN_ID_COOLANT:
         coolant = msg.data[0]
-
     elif msg.arbitration_id == CAN_ID_IAT:
         iat = msg.data[0]
-
     elif msg.arbitration_id == CAN_ID_TPS:
         tps = msg.data[0]
-
 
 # ============================================================
 #               SERIAL / ARDUINO FUNCTIONS
@@ -118,23 +116,16 @@ def init_serial():
 
 def read_serial(ser):
     global rpm, speed, gear, coolant, iat, tps, imu_data
-
     if not ser:
         return
-
     line = ser.readline().decode(errors='ignore').strip()
     if not line:
         return
-
     parts = line.split(",")
-
     for p in parts:
         if ":" not in p:
             continue
-
         key, value = p.split(":", 1)
-
-        # Convert numeric
         try:
             if "." in value:
                 value = float(value)
@@ -142,7 +133,6 @@ def read_serial(ser):
                 value = int(value)
         except:
             continue
-
         if key == "RPM":
             rpm = value
         elif key == "SPD":
@@ -180,9 +170,38 @@ def read_serial(ser):
         elif key == "MZ":
             imu_data["mz"] = value
 
+# ============================================================
+#               LEAN + PITCH FILTER FUNCTION
+# ============================================================
+
+def update_lean_pitch():
+    global lean_filtered, pitch_filtered, prev_time
+    now = time.time()
+    if prev_time is None:
+        prev_time = now
+    dt = now - prev_time
+    prev_time = now
+
+    # Accelerometer tilt
+    lean_acc = math.degrees(math.atan2(imu_data["ay"], imu_data["az"]))
+    pitch_acc = math.degrees(math.atan2(-imu_data["ax"],
+                                        math.sqrt(imu_data["ay"]**2 + imu_data["az"]**2)))
+
+    # Gyro integration
+    lean_gyro = lean_filtered + imu_data["gx"] * dt
+    pitch_gyro = pitch_filtered + imu_data["gy"] * dt
+
+    # Complementary filter
+    alpha = 0.98
+    lean_filtered = alpha * lean_gyro + (1 - alpha) * lean_acc
+    pitch_filtered = alpha * pitch_gyro + (1 - alpha) * pitch_acc
+
+    # Store filtered values
+    imu_data["lean"] = lean_filtered
+    imu_data["pitch"] = pitch_filtered
 
 # ============================================================
-#                    PYGAME INIT
+#               PYGAME INIT
 # ============================================================
 
 pygame.init()
@@ -203,9 +222,8 @@ font_8 = pygame.font.SysFont("Arial", 150)
 font_9 = pygame.font.SysFont("Arial", 160)
 font_10 = pygame.font.SysFont("Arial", 170)
 
-
 # ============================================================
-#                  BACKGROUND IMAGES
+#               BACKGROUND IMAGES
 # ============================================================
 
 def load_bg(path):
@@ -216,15 +234,13 @@ def load_bg(path):
         print(f"[WARNING] Missing {path}")
         return None
 
-
 bg_main = load_bg(BG_MAIN)
 bg_trail = load_bg(BG_TRAIL)
 bg_lean = load_bg(BG_LEAN)
 bg_engmag = load_bg(BG_ENGMAG)
 
-
 # ============================================================
-#                       SPLASH
+#               SPLASH
 # ============================================================
 
 def show_splash():
@@ -237,115 +253,86 @@ def show_splash():
     except:
         print("[SPLASH] Missing image.")
 
-
 # ============================================================
-#                     SCREEN FUNCTIONS
+#               SCREEN FUNCTIONS
 # ============================================================
 
-def screen_1():          #Main Screen (essentially a normal dash display)
+def screen_1():
     if bg_main:
         screen.blit(bg_main, (0, 0))
     else:
         screen.fill((0, 0, 0))
 
     draw_rpm_bar(screen, rpm)
-    # Render speed text
+
+    # Render speed text right-aligned
     speed_text = font_7.render(f"{speed}", True, (0, 0, 0))
     speed_w = speed_text.get_width()
-
-    # Right-align the speed at x = 460
     right_anchor = 460
     speed_x = right_anchor - speed_w
-
     screen.blit(speed_text, (speed_x, 150))
-
-    # MPH stays where you placed it
     screen.blit(font_1.render(" mph", True, (0, 0, 0)), (460, 265))
+
+    # Gear display
     display_gear = "N" if gear == 0 else str(gear)
-    # Neutral = green, other gears = black
     gear_color = (0, 255, 0) if display_gear == "N" else (0, 0, 0)
     screen.blit(font_6.render(display_gear, True, gear_color), (50, 170))
     screen.blit(font_small.render(f"{coolant} C", True, (0, 0, 0)), (30, 385))
 
-
-def screen_2():     #Trail Display
+def screen_2():
     if bg_trail:
         screen.blit(bg_trail, (0, 0))
     else:
         screen.fill((20, 20, 20))
-
     screen.blit(font_big.render("TRAIL DATA", True, (255, 200, 0)), (250, 40))
     screen.blit(font_small.render(f"Speed: {speed}", True, (255, 255, 255)), (50, 200))
     screen.blit(font_small.render(f"Brake PSI: {imu_data['brake']:.1f}", True, (255, 180, 180)), (50, 260))
 
-
-def screen_3():    #Lean angles Display
+def screen_3():
     if bg_lean:
         screen.blit(bg_lean, (0, 0))
     else:
         screen.fill((40, 0, 40))
-
     screen.blit(font_big.render("LEAN ANGLE", True, (0, 255, 255)), (230, 40))
     screen.blit(font_small.render(f"Lean: {imu_data['lean']:.1f}", True, (255, 255, 255)), (50, 200))
     screen.blit(font_small.render(f"Pitch: {imu_data['pitch']:.1f}", True, (255, 255, 255)), (50, 260))
 
-
-def screen_4():    #Engine management display
+def screen_4():
     if bg_engmag:
         screen.blit(bg_engmag, (0, 0))
     else:
         screen.fill((0, 30, 60))
-
     screen.blit(font_big.render("ENGINE MAG", True, (255, 255, 0)), (220, 40))
-
     screen.blit(font_small.render(f"Mag X: {imu_data['mx']:.2f}", True, (255, 255, 255)), (50, 200))
     screen.blit(font_small.render(f"Mag Y: {imu_data['my']:.2f}", True, (255, 255, 255)), (50, 260))
     screen.blit(font_small.render(f"Mag Z: {imu_data['mz']:.2f}", True, (255, 255, 255)), (50, 320))
 
+# ============================================================
+#               RPM BAR FUNCTION
+# ============================================================
 
-flash_state = True      # global toggle
+flash_state = True
 last_flash = 0
-flash_interval = 0.15   # seconds (adjust for faster/slower flash)
+flash_interval = 0.15
 
 def draw_rpm_bar(surface, rpm, max_rpm=16000):
     global flash_state, last_flash
-
-    # Position and size
-    x = 20
-    y = 0
-    width = 760
-    height = 100
-
-    # Background bar (dark gray)
+    x, y, width, height = 20, 0, 760, 100
     pygame.draw.rect(surface, (50, 50, 50), (x, y, width, height))
-
-    # Clamp RPM
     rpm = max(0, min(rpm, max_rpm))
-
-    # Filled width
     fill_width = int((rpm / max_rpm) * width)
-
-    # Percentage
     pct = rpm / max_rpm
-
-    # Color zones: soft blue → green → red
     if pct < 0.7:
-        color = (100, 140, 255)     # soft blue
+        color = (100, 140, 255)
     elif pct < 0.8:
-        color = (0, 255, 0)         # green
+        color = (0, 255, 0)
     else:
-        # Red zone: flashing
         now = time.time()
         if now - last_flash > flash_interval:
             flash_state = not flash_state
             last_flash = now
-
         color = (255, 0, 0) if flash_state else (120, 0, 0)
-
-    # Draw filled section
     pygame.draw.rect(surface, color, (x, y, fill_width, height))
-
-    # Border
     pygame.draw.rect(surface, (255, 255, 255), (x, y, width, height), 4)
 
 # ============================================================
@@ -354,40 +341,37 @@ def draw_rpm_bar(surface, rpm, max_rpm=16000):
 
 def main():
     show_splash()
-
     bus = init_can()
     ser = init_serial()
-
     current_screen = 1
     running = True
 
     while running:
-        # EVENT HANDLING
+        # Event handling
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
-            if event.type == pygame.KEYDOWN:
+            elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT:
                     current_screen += 1
                     if current_screen > 4:
                         current_screen = 1
-
-                if event.key == pygame.K_LEFT:
+                elif event.key == pygame.K_LEFT:
                     current_screen -= 1
                     if current_screen < 1:
                         current_screen = 4
 
-        # SERIAL ALWAYS READ (REAL or FAKE)
+        # Read serial and update lean/pitch filter
         read_serial(ser)
+        update_lean_pitch()
 
-        # CAN ONLY READ IN REAL MODE
+        # CAN data in REAL mode
         if INPUT_MODE == "REAL" and bus:
             msg = bus.recv(timeout=0.01)
             if msg:
                 process_can_frame(msg)
 
-        # DRAW SCREEN
+        # Draw screen
         if current_screen == 1:
             screen_1()
         elif current_screen == 2:

@@ -1,6 +1,5 @@
 #CAN Input Sniffing tool for setting up main code
 
-#!/usr/bin/env python3
 """
 CAN Sniffer Tool for Raspberry Pi
 --------------------------------
@@ -9,8 +8,6 @@ Use this to discover:
 - Raw data bytes
 - Message frequency
 - Which ID changes with RPM, Speed, etc.
-
-Run this separately. DO NOT include in your main dash program.
 """
 
 #Make sure bike is running when you run this program to get data
