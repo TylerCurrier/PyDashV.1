@@ -21,12 +21,13 @@ INPUT_MODE = "FAKE"  # <-- CHANGE THIS ONE VARIABLE
 # ============================================================
 #                  USER SETTINGS
 # ============================================================
+IMAGE_DIR = "images/"
 
-SPLASH_IMAGE = "splash.jpg"
-BG_MAIN = "bg_main.jpg"
-BG_TRAIL = "bg_trail.jpg"
-BG_LEAN = "bg_lean.jpg"
-BG_ENGMAG = "bg_engmag.jpg"
+SPLASH_IMAGE = IMAGE_DIR + "splash.jpg"
+BG_MAIN = IMAGE_DIR + "bg_main.jpg"
+BG_TRAIL = IMAGE_DIR + "bg_trail.jpg"
+BG_LEAN = IMAGE_DIR + "bg_lean.jpg"
+BG_ENGMAG = IMAGE_DIR + "bg_engmag.jpg"
 
 SERIAL_PORT = "COM6"  # This will change on Linux
 SERIAL_BAUD = 115200

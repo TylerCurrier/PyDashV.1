@@ -5,8 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1614f22e-7a5e-4e9b-aa48-d929013fc378" name="Changes" comment="commit next">
-      <change afterPath="$PROJECT_DIR$/SerialTest.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Arduino/Fake Data Input (ARD)" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Arduino/MPU6050 Calibration" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Arduino/Nano_IMU_POT" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PyDashMain.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyDashMain.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Splash.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Images/Splash.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bg_main.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Images/bg_main.jpg" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,6 +64,11 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\PyDashV.1\Images" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -75,7 +84,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1763670105247</updated>
-      <workItem from="1763670106411" duration="14130000" />
+      <workItem from="1763670106411" duration="18638000" />
     </task>
     <task id="LOCAL-00001" summary="commit start">
       <option name="closed" value="true" />
@@ -141,7 +150,31 @@
       <option name="project" value="LOCAL" />
       <updated>1763751786715</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="commit next">
+      <option name="closed" value="true" />
+      <created>1763769741232</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1763769741232</updated>
+    </task>
+    <task id="LOCAL-00010" summary="commit next">
+      <option name="closed" value="true" />
+      <created>1763772051422</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1763772051422</updated>
+    </task>
+    <task id="LOCAL-00011" summary="commit next">
+      <option name="closed" value="true" />
+      <created>1763773885462</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1763773885462</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -154,6 +187,6 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PyDashV_1$SerialTest.coverage" NAME="SerialTest Coverage Results" MODIFIED="1763767535513" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PyDashV_1$PyDashMain.coverage" NAME="PyDashMain Coverage Results" MODIFIED="1763769694156" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PyDashV_1$PyDashMain.coverage" NAME="PyDashMain Coverage Results" MODIFIED="1763938232351" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
