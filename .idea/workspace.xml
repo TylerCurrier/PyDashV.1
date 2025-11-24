@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1614f22e-7a5e-4e9b-aa48-d929013fc378" name="Changes" comment="commit next">
-      <change afterPath="$PROJECT_DIR$/Arduino/Fake Data Input (ARD)" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Arduino/MPU6050 Calibration" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Arduino/Nano_IMU_POT" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PyDashMain.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyDashMain.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Splash.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Images/Splash.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bg_main.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Images/bg_main.jpg" afterDir="false" />
+    <list default="true" id="1614f22e-7a5e-4e9b-aa48-d929013fc378" name="Changes" comment="Ard up">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +79,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1763670105247</updated>
-      <workItem from="1763670106411" duration="18638000" />
+      <workItem from="1763670106411" duration="20089000" />
     </task>
     <task id="LOCAL-00001" summary="commit start">
       <option name="closed" value="true" />
@@ -174,7 +169,23 @@
       <option name="project" value="LOCAL" />
       <updated>1763773885462</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Ard added">
+      <option name="closed" value="true" />
+      <created>1763938783511</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1763938783511</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Ard up">
+      <option name="closed" value="true" />
+      <created>1763948116723</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1763948116723</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -183,7 +194,9 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="commit start" />
     <MESSAGE value="commit next" />
-    <option name="LAST_COMMIT_MESSAGE" value="commit next" />
+    <MESSAGE value="Ard added" />
+    <MESSAGE value="Ard up" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ard up" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PyDashV_1$SerialTest.coverage" NAME="SerialTest Coverage Results" MODIFIED="1763767535513" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
