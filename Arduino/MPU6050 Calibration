@@ -1,3 +1,5 @@
+//this is the program for configuring the IMU
+
 #include <Wire.h>
 #include <MPU6050.h>
 
