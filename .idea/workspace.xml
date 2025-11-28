@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1614f22e-7a5e-4e9b-aa48-d929013fc378" name="Changes" comment="Ard up">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    <list default="true" id="1614f22e-7a5e-4e9b-aa48-d929013fc378" name="Changes" comment="readme">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/bg_main.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PyDashMain.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyDashMain.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +81,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1763670105247</updated>
-      <workItem from="1763670106411" duration="20089000" />
+      <workItem from="1763670106411" duration="26817000" />
     </task>
     <task id="LOCAL-00001" summary="commit start">
       <option name="closed" value="true" />
@@ -185,7 +187,23 @@
       <option name="project" value="LOCAL" />
       <updated>1763948116723</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Ard up">
+      <option name="closed" value="true" />
+      <created>1763998302427</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1763998302427</updated>
+    </task>
+    <task id="LOCAL-00015" summary="readme">
+      <option name="closed" value="true" />
+      <created>1763998353325</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1763998353325</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -196,10 +214,11 @@
     <MESSAGE value="commit next" />
     <MESSAGE value="Ard added" />
     <MESSAGE value="Ard up" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ard up" />
+    <MESSAGE value="readme" />
+    <option name="LAST_COMMIT_MESSAGE" value="readme" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PyDashV_1$SerialTest.coverage" NAME="SerialTest Coverage Results" MODIFIED="1763767535513" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PyDashV_1$PyDashMain.coverage" NAME="PyDashMain Coverage Results" MODIFIED="1763938232351" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PyDashV_1$PyDashMain.coverage" NAME="PyDashMain Coverage Results" MODIFIED="1764287968614" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

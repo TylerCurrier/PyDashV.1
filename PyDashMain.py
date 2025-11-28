@@ -1,9 +1,7 @@
-#!/usr/bin/env python3
-# PyDashMain V2.1 – FULL VERSION
+# PyDashMain V2.1
 # Tyler Currier
 
-#remain to focus on ui design and cases, until break when data can be parsed correctly.
-
+# Imported libraries
 import time
 import pygame
 import serial
@@ -15,21 +13,15 @@ import math
 # ============================================================
 
 INPUT_MODE = "FAKE"  # <-- CHANGE THIS ONE VARIABLE
-# "REAL" = CAN + Arduino
-# "FAKE" = Arduino only (fake data)
 
 # ============================================================
 #                  USER SETTINGS
 # ============================================================
 IMAGE_DIR = "images/"
-
 SPLASH_IMAGE = IMAGE_DIR + "splash.jpg"
-BG_MAIN = IMAGE_DIR + "bg_main.jpg"
-BG_TRAIL = IMAGE_DIR + "bg_trail.jpg"
-BG_LEAN = IMAGE_DIR + "bg_lean.jpg"
-BG_ENGMAG = IMAGE_DIR + "bg_engmag.jpg"
+BG_IMAGE = IMAGE_DIR + "mainback.jpg"
 
-SERIAL_PORT = "COM6"  # This will change on Linux
+SERIAL_PORT = "COM6"
 SERIAL_BAUD = 115200
 
 CAN_CHANNEL = "can0"
@@ -48,7 +40,6 @@ CAN_ID_TPS = 0x105
 #               GLOBAL DATA VARIABLES
 # ============================================================
 
-# CAN variables
 rpm = 0
 speed = 0
 gear = 0
@@ -59,17 +50,11 @@ tps = 0
 # IMU / Arduino variables
 imu_data = {
     "ax": 0, "ay": 0, "az": 0,
-    "gx": 0, "gy": 0, "gz": 0,
-    "mx": 0, "my": 0, "mz": 0,
     "brake": 0,
     "lean": 0,
     "pitch": 0
 }
 
-# Filter globals
-lean_filtered = 0
-pitch_filtered = 0
-prev_time = None
 
 # ============================================================
 #               CAN FUNCTIONS
@@ -103,6 +88,7 @@ def process_can_frame(msg):
     elif msg.arbitration_id == CAN_ID_TPS:
         tps = msg.data[0]
 
+
 # ============================================================
 #               SERIAL / ARDUINO FUNCTIONS
 # ============================================================
@@ -119,23 +105,24 @@ def init_serial():
 
 def read_serial(ser):
     global rpm, speed, gear, coolant, iat, tps, imu_data
+
     if not ser:
         return
+
     line = ser.readline().decode(errors='ignore').strip()
     if not line:
         return
+
     parts = line.split(",")
     for p in parts:
         if ":" not in p:
             continue
         key, value = p.split(":", 1)
         try:
-            if "." in value:
-                value = float(value)
-            else:
-                value = int(value)
+            value = float(value) if "." in value else int(value)
         except:
             continue
+
         if key == "RPM":
             rpm = value
         elif key == "SPD":
@@ -173,35 +160,6 @@ def read_serial(ser):
         elif key == "MZ":
             imu_data["mz"] = value
 
-# ============================================================
-#               LEAN + PITCH FILTER FUNCTION
-# ============================================================
-
-def update_lean_pitch():
-    global lean_filtered, pitch_filtered, prev_time
-    now = time.time()
-    if prev_time is None:
-        prev_time = now
-    dt = now - prev_time
-    prev_time = now
-
-    # Accelerometer tilt
-    lean_acc = math.degrees(math.atan2(imu_data["ay"], imu_data["az"]))
-    pitch_acc = math.degrees(math.atan2(-imu_data["ax"],
-                                        math.sqrt(imu_data["ay"]**2 + imu_data["az"]**2)))
-
-    # Gyro integration
-    lean_gyro = lean_filtered + imu_data["gx"] * dt
-    pitch_gyro = pitch_filtered + imu_data["gy"] * dt
-
-    # Complementary filter
-    alpha = 0.98
-    lean_filtered = alpha * lean_gyro + (1 - alpha) * lean_acc
-    pitch_filtered = alpha * pitch_gyro + (1 - alpha) * pitch_acc
-
-    # Store filtered values
-    imu_data["lean"] = lean_filtered
-    imu_data["pitch"] = pitch_filtered
 
 # ============================================================
 #               PYGAME INIT
@@ -225,6 +183,7 @@ font_8 = pygame.font.SysFont("Arial", 150)
 font_9 = pygame.font.SysFont("Arial", 160)
 font_10 = pygame.font.SysFont("Arial", 170)
 
+
 # ============================================================
 #               BACKGROUND IMAGES
 # ============================================================
@@ -237,10 +196,9 @@ def load_bg(path):
         print(f"[WARNING] Missing {path}")
         return None
 
-bg_main = load_bg(BG_MAIN)
-bg_trail = load_bg(BG_TRAIL)
-bg_lean = load_bg(BG_LEAN)
-bg_engmag = load_bg(BG_ENGMAG)
+
+bg_main = load_bg(BG_IMAGE)
+
 
 # ============================================================
 #               SPLASH
@@ -256,59 +214,54 @@ def show_splash():
     except:
         print("[SPLASH] Missing image.")
 
+
 # ============================================================
 #               SCREEN FUNCTIONS
 # ============================================================
 
-def screen_1():
+def screen_1():     #Main
     if bg_main:
         screen.blit(bg_main, (0, 0))
     else:
         screen.fill((0, 0, 0))
 
-    draw_rpm_bar(screen, rpm)
 
-    # Render speed text right-aligned
-    speed_text = font_7.render(f"{speed}", True, (0, 0, 0))
-    speed_w = speed_text.get_width()
-    right_anchor = 460
-    speed_x = right_anchor - speed_w
-    screen.blit(speed_text, (speed_x, 150))
-    screen.blit(font_1.render(" mph", True, (0, 0, 0)), (460, 265))
+    draw_base_layout()
 
-    # Gear display
-    display_gear = "N" if gear == 0 else str(gear)
-    gear_color = (0, 255, 0) if display_gear == "N" else (0, 0, 0)
-    screen.blit(font_6.render(display_gear, True, gear_color), (50, 170))
-    screen.blit(font_small.render(f"{coolant} C", True, (0, 0, 0)), (30, 385))
 
 def screen_2():
-    if bg_trail:
-        screen.blit(bg_trail, (0, 0))
+    if bg_main:
+        screen.blit(bg_main, (0, 0))
     else:
         screen.fill((20, 20, 20))
+
     screen.blit(font_big.render("TRAIL DATA", True, (255, 200, 0)), (250, 40))
     screen.blit(font_small.render(f"Speed: {speed}", True, (255, 255, 255)), (50, 200))
     screen.blit(font_small.render(f"Brake PSI: {imu_data['brake']:.1f}", True, (255, 180, 180)), (50, 260))
 
+
 def screen_3():
-    if bg_lean:
-        screen.blit(bg_lean, (0, 0))
+    if bg_main:
+        screen.blit(bg_main, (0, 0))
     else:
         screen.fill((40, 0, 40))
+
     screen.blit(font_big.render("LEAN ANGLE", True, (0, 255, 255)), (230, 40))
     screen.blit(font_small.render(f"Lean: {imu_data['lean']:.1f}", True, (255, 255, 255)), (50, 200))
     screen.blit(font_small.render(f"Pitch: {imu_data['pitch']:.1f}", True, (255, 255, 255)), (50, 260))
 
+
 def screen_4():
-    if bg_engmag:
-        screen.blit(bg_engmag, (0, 0))
+    if bg_main:
+        screen.blit(bg_main, (0, 0))
     else:
         screen.fill((0, 30, 60))
+
     screen.blit(font_big.render("ENGINE MAG", True, (255, 255, 0)), (220, 40))
     screen.blit(font_small.render(f"Mag X: {imu_data['mx']:.2f}", True, (255, 255, 255)), (50, 200))
     screen.blit(font_small.render(f"Mag Y: {imu_data['my']:.2f}", True, (255, 255, 255)), (50, 260))
     screen.blit(font_small.render(f"Mag Z: {imu_data['mz']:.2f}", True, (255, 255, 255)), (50, 320))
+
 
 # ============================================================
 #               RPM BAR FUNCTION
@@ -318,13 +271,17 @@ flash_state = True
 last_flash = 0
 flash_interval = 0.15
 
+
 def draw_rpm_bar(surface, rpm, max_rpm=16000):
     global flash_state, last_flash
-    x, y, width, height = 20, 0, 760, 100
+
+    x, y, width, height = 0, 0, 800, 100
     pygame.draw.rect(surface, (50, 50, 50), (x, y, width, height))
+
     rpm = max(0, min(rpm, max_rpm))
     fill_width = int((rpm / max_rpm) * width)
     pct = rpm / max_rpm
+
     if pct < 0.7:
         color = (100, 140, 255)
     elif pct < 0.8:
@@ -335,8 +292,67 @@ def draw_rpm_bar(surface, rpm, max_rpm=16000):
             flash_state = not flash_state
             last_flash = now
         color = (255, 0, 0) if flash_state else (120, 0, 0)
+
     pygame.draw.rect(surface, color, (x, y, fill_width, height))
     pygame.draw.rect(surface, (255, 255, 255), (x, y, width, height), 4)
+    #tick marks major
+    pygame.draw.line(screen, (255,255,255), (50,105), (50,80), 2)
+    pygame.draw.line(screen, (255,255,255), (100,105), (100,80), 2)
+    pygame.draw.line(screen, (255,255,255), (150,105), (150,80), 2)
+    pygame.draw.line(screen, (255,255,255), (200,105), (200,80), 2)
+    pygame.draw.line(screen, (255, 255, 255), (250,105), (250,60), 2)
+    pygame.draw.line(screen, (255,255,255), (300,105), (300,80), 2)
+    pygame.draw.line(screen, (255,255,255), (350, 105), (350, 80), 2)
+    pygame.draw.line(screen, (255,255,255), (400, 105), (400, 80), 2)
+    pygame.draw.line(screen, (255,255,255), (450, 105), (450, 80), 2)
+    pygame.draw.line(screen, (255, 255, 255), (500, 105), (500, 60), 2)
+    pygame.draw.line(screen, (255,255,255), (550, 105), (550, 80), 2)
+    pygame.draw.line(screen, (255,255,255), (600, 105), (600, 80), 2)
+    pygame.draw.line(screen, (255,255,255), (650, 105), (650, 80), 2)
+    pygame.draw.line(screen, (255,255, 255), (700, 105), (700, 80), 2)
+    pygame.draw.line(screen, (255, 255, 255), (750, 105), (750, 60), 2)
+    pygame.draw.line(screen, (255,255,255), (800, 105), (800, 80), 2)
+
+# ============================================================
+#               BASE LAYOUT FUNCTION
+# ============================================================
+
+def draw_base_layout():
+#Base layout rectangles
+        #rpm bar and values
+    pygame.draw.rect(screen, (0, 0, 0), (0, 0, 800, 120))  # filled black box
+    pygame.draw.rect(screen, (255, 255, 255), (0, 0, 800, 120), 3)  # white outline (3px thick)
+        #Gear
+    pygame.draw.rect(screen, (0, 0, 0), (0, 120, 140, 160))
+    pygame.draw.rect(screen, (255, 255, 255), (0, 120, 140, 160), 3)
+        #temps
+    pygame.draw.rect(screen, (0, 0, 0), (0, 420, 140, 60))
+    pygame.draw.rect(screen, (255, 255, 255), (0, 420, 140, 60), 3)
+        #time
+    pygame.draw.rect(screen, (0, 0, 0), (640, 420, 160, 60))
+    pygame.draw.rect(screen, (255, 255, 255), (640, 420, 160, 60), 3)
+        #connections
+    pygame.draw.rect(screen, (0, 0, 0), (480, 420, 160, 60))
+    pygame.draw.rect(screen, (255, 255, 255), (480, 420, 160, 60), 3)
+
+    #Base Layout data
+        #Gear
+    display_gear = "N" if gear == 0 else str(gear)
+    gear_color = (0, 255, 0) if display_gear == "N" else (255, 255, 255)
+    screen.blit(font_10.render(display_gear, True, gear_color), (25, 100))
+        #RPM
+    draw_rpm_bar(screen, rpm)
+
+
+# speed
+# speed_text = font_7.render(f"{speed}", True, (0, 0, 0))
+# speed_x = 460 - speed_text.get_width()
+# screen.blit(speed_text, (speed_x, 150))
+# screen.blit(font_1.render(" mph", True, (0, 0, 0)), (460, 265))
+
+# cool_temp
+# screen.blit(font_small.render(f"{coolant} C", True, (0, 0, 0)), (30, 385))
+
 
 # ============================================================
 #                       MAIN LOOP
@@ -350,31 +366,24 @@ def main():
     running = True
 
     while running:
-        # Event handling
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT:
-                    current_screen += 1
-                    if current_screen > 4:
-                        current_screen = 1
+                    current_screen = 1 if current_screen == 4 else current_screen + 1
                 elif event.key == pygame.K_LEFT:
-                    current_screen -= 1
-                    if current_screen < 1:
-                        current_screen = 4
+                    current_screen = 4 if current_screen == 1 else current_screen - 1
 
-        # Read serial and update lean/pitch filter
+        # SERIAL ONLY — no filtering applied
         read_serial(ser)
-        update_lean_pitch()
 
-        # CAN data in REAL mode
         if INPUT_MODE == "REAL" and bus:
             msg = bus.recv(timeout=0.01)
             if msg:
                 process_can_frame(msg)
 
-        # Draw screen
         if current_screen == 1:
             screen_1()
         elif current_screen == 2:
