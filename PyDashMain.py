@@ -288,7 +288,7 @@ def screen_5():
 
 flash_state = True
 last_flash = 0
-flash_interval = 0.15
+flash_interval = 0.10
 
 
 def draw_rpm_bar(surface, rpm, max_rpm=16000):
@@ -367,7 +367,7 @@ def draw_base_layout():
     screen.blit(font_1_2.render(f"15", True, (255, 255, 255)), (742, 100))
 
         #Coolant Temp
-    screen.blit(font_small.render(f"{coolant} C", True, (0, 0, 0)), (30, 385))
+    screen.blit(font_1_3.render(f"{coolant} C", True, (255, 255, 255)), (20, 440))
         #Time
 
         #Connections
