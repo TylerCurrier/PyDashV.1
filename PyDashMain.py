@@ -172,6 +172,10 @@ clock = pygame.time.Clock()
 
 font_big = pygame.font.SysFont("Arial", 120)
 font_small = pygame.font.SysFont("Arial", 60)
+font_1_1 = pygame.font.SysFont("Arial", 10)
+font_1_2 = pygame.font.SysFont("Arial", 22)
+font_1_3 = pygame.font.SysFont("Arial", 25)
+font_1_4 = pygame.font.SysFont("Arial", 40)
 font_1 = pygame.font.SysFont("Arial", 60)
 font_2 = pygame.font.SysFont("Arial", 80)
 font_3 = pygame.font.SysFont("Arial", 90)
@@ -219,7 +223,8 @@ def show_splash():
 #               SCREEN FUNCTIONS
 # ============================================================
 
-def screen_1():     #Main
+#Main Screen
+def screen_1():
     if bg_main:
         screen.blit(bg_main, (0, 0))
     else:
@@ -228,39 +233,53 @@ def screen_1():     #Main
 
     draw_base_layout()
 
+    # speed
+    # speed_text = font_7.render(f"{speed}", True, (0, 0, 0))
+    # speed_x = 460 - speed_text.get_width()
+    # screen.blit(speed_text, (speed_x, 150))
+    # screen.blit(font_1.render(" mph", True, (0, 0, 0)), (460, 265))
 
+#Laptimer Screen
 def screen_2():
     if bg_main:
         screen.blit(bg_main, (0, 0))
     else:
-        screen.fill((20, 20, 20))
+        screen.fill((0, 0, 0))
 
     screen.blit(font_big.render("TRAIL DATA", True, (255, 200, 0)), (250, 40))
     screen.blit(font_small.render(f"Speed: {speed}", True, (255, 255, 255)), (50, 200))
     screen.blit(font_small.render(f"Brake PSI: {imu_data['brake']:.1f}", True, (255, 180, 180)), (50, 260))
 
 
+#Lean Screen
 def screen_3():
     if bg_main:
         screen.blit(bg_main, (0, 0))
     else:
-        screen.fill((40, 0, 40))
+        screen.fill((0, 0, 0))
 
     screen.blit(font_big.render("LEAN ANGLE", True, (0, 255, 255)), (230, 40))
     screen.blit(font_small.render(f"Lean: {imu_data['lean']:.1f}", True, (255, 255, 255)), (50, 200))
     screen.blit(font_small.render(f"Pitch: {imu_data['pitch']:.1f}", True, (255, 255, 255)), (50, 260))
 
-
+#GForce Screen
 def screen_4():
     if bg_main:
         screen.blit(bg_main, (0, 0))
     else:
-        screen.fill((0, 30, 60))
+        screen.fill((0, 0, 0))
 
     screen.blit(font_big.render("ENGINE MAG", True, (255, 255, 0)), (220, 40))
     screen.blit(font_small.render(f"Mag X: {imu_data['mx']:.2f}", True, (255, 255, 255)), (50, 200))
     screen.blit(font_small.render(f"Mag Y: {imu_data['my']:.2f}", True, (255, 255, 255)), (50, 260))
     screen.blit(font_small.render(f"Mag Z: {imu_data['mz']:.2f}", True, (255, 255, 255)), (50, 320))
+
+#Trail Screen
+def screen_5():
+    if bg_main:
+        screen.blit(bg_main, (0, 0))
+    else:
+        screen.fill((0, 0, 0))
 
 
 # ============================================================
@@ -296,22 +315,22 @@ def draw_rpm_bar(surface, rpm, max_rpm=16000):
     pygame.draw.rect(surface, color, (x, y, fill_width, height))
     pygame.draw.rect(surface, (255, 255, 255), (x, y, width, height), 4)
     #tick marks major
-    pygame.draw.line(screen, (255,255,255), (50,105), (50,80), 2)
-    pygame.draw.line(screen, (255,255,255), (100,105), (100,80), 2)
-    pygame.draw.line(screen, (255,255,255), (150,105), (150,80), 2)
-    pygame.draw.line(screen, (255,255,255), (200,105), (200,80), 2)
-    pygame.draw.line(screen, (255, 255, 255), (250,105), (250,60), 2)
-    pygame.draw.line(screen, (255,255,255), (300,105), (300,80), 2)
-    pygame.draw.line(screen, (255,255,255), (350, 105), (350, 80), 2)
-    pygame.draw.line(screen, (255,255,255), (400, 105), (400, 80), 2)
-    pygame.draw.line(screen, (255,255,255), (450, 105), (450, 80), 2)
-    pygame.draw.line(screen, (255, 255, 255), (500, 105), (500, 60), 2)
-    pygame.draw.line(screen, (255,255,255), (550, 105), (550, 80), 2)
-    pygame.draw.line(screen, (255,255,255), (600, 105), (600, 80), 2)
-    pygame.draw.line(screen, (255,255,255), (650, 105), (650, 80), 2)
-    pygame.draw.line(screen, (255,255, 255), (700, 105), (700, 80), 2)
-    pygame.draw.line(screen, (255, 255, 255), (750, 105), (750, 60), 2)
-    pygame.draw.line(screen, (255,255,255), (800, 105), (800, 80), 2)
+    pygame.draw.line(screen, (255,255,255), (50,107), (50,80), 2)
+    pygame.draw.line(screen, (255,255,255), (100,107), (100,80), 2)
+    pygame.draw.line(screen, (255,255,255), (150,107), (150,80), 2)
+    pygame.draw.line(screen, (255,255,255), (200,107), (200,80), 2)
+    pygame.draw.line(screen, (255, 255, 255), (250,98), (250,60), 2)
+    pygame.draw.line(screen, (255,255,255), (300,107), (300,80), 2)
+    pygame.draw.line(screen, (255,255,255), (350, 107), (350, 80), 2)
+    pygame.draw.line(screen, (255,255,255), (400, 107), (400, 80), 2)
+    pygame.draw.line(screen, (255,255,255), (450, 107), (450, 80), 2)
+    pygame.draw.line(screen, (255, 255, 255), (500, 98), (500, 60), 2)
+    pygame.draw.line(screen, (255,255,255), (550, 107), (550, 80), 2)
+    pygame.draw.line(screen, (255,255,255), (600, 107), (600, 80), 2)
+    pygame.draw.line(screen, (255,255,255), (650, 107), (650, 80), 2)
+    pygame.draw.line(screen, (255,255, 255), (700, 107), (700, 80), 2)
+    pygame.draw.line(screen, (255, 255, 255), (750, 98), (750, 60), 2)
+    pygame.draw.line(screen, (255,255,255), (800, 107), (800, 80), 2)
 
 # ============================================================
 #               BASE LAYOUT FUNCTION
@@ -320,8 +339,8 @@ def draw_rpm_bar(surface, rpm, max_rpm=16000):
 def draw_base_layout():
 #Base layout rectangles
         #rpm bar and values
-    pygame.draw.rect(screen, (0, 0, 0), (0, 0, 800, 120))  # filled black box
-    pygame.draw.rect(screen, (255, 255, 255), (0, 0, 800, 120), 3)  # white outline (3px thick)
+    pygame.draw.rect(screen, (0, 0, 0), (0, 0, 800, 128))  # filled black box
+    pygame.draw.rect(screen, (255, 255, 255), (0, 0, 800, 128), 2)  # white outline (3px thick)
         #Gear
     pygame.draw.rect(screen, (0, 0, 0), (0, 120, 140, 160))
     pygame.draw.rect(screen, (255, 255, 255), (0, 120, 140, 160), 3)
@@ -342,16 +361,18 @@ def draw_base_layout():
     screen.blit(font_10.render(display_gear, True, gear_color), (25, 100))
         #RPM
     draw_rpm_bar(screen, rpm)
+        #RPM values
+    screen.blit(font_1_2.render(f"5", True, (255, 255, 255)), (245, 100))
+    screen.blit(font_1_2.render(f"10", True, (255, 255, 255)), (492, 100))
+    screen.blit(font_1_2.render(f"15", True, (255, 255, 255)), (742, 100))
+
+        #Coolant Temp
+    screen.blit(font_small.render(f"{coolant} C", True, (0, 0, 0)), (30, 385))
+        #Time
+
+        #Connections
 
 
-# speed
-# speed_text = font_7.render(f"{speed}", True, (0, 0, 0))
-# speed_x = 460 - speed_text.get_width()
-# screen.blit(speed_text, (speed_x, 150))
-# screen.blit(font_1.render(" mph", True, (0, 0, 0)), (460, 265))
-
-# cool_temp
-# screen.blit(font_small.render(f"{coolant} C", True, (0, 0, 0)), (30, 385))
 
 
 # ============================================================
@@ -384,14 +405,16 @@ def main():
             if msg:
                 process_can_frame(msg)
 
-        if current_screen == 1:
+        if current_screen == 1: #Main
             screen_1()
-        elif current_screen == 2:
+        elif current_screen == 2: #Laptimer
             screen_2()
-        elif current_screen == 3:
+        elif current_screen == 3: #Lean
             screen_3()
-        elif current_screen == 4:
+        elif current_screen == 4: #Gforce
             screen_4()
+        elif current_screen == 5: #Trail
+            screen_5()
 
         pygame.display.update()
         clock.tick(FPS)
