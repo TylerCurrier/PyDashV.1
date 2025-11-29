@@ -55,6 +55,10 @@ imu_data = {
     "pitch": 0
 }
 
+#The max lean values have to be definied globally to prevent overwriting in their function
+maxl = 0
+maxr = 0
+
 
 # ============================================================
 #               CAN FUNCTIONS
@@ -467,6 +471,20 @@ def draw_gforce():
 
 def draw_lean():
 
+    lean = imu_data["lean"]
+    if lean >= 0:
+        lean_side = 0 #=right
+    else:
+        lean_side = 1 #=left
+    lean_corr = round(abs(lean)) #corrected lean abs and round
+
+    global maxl, maxr
+
+    if lean > maxr:
+        maxr = round(abs(lean))
+    if lean < maxl:
+        maxl = round(abs(lean))
+
     cx = 400
     cy = 285
     radius = 150
@@ -530,11 +548,32 @@ def draw_lean():
 
         #lean stats
     #Current Lean
-    #pygame.draw.rect(screen, (0, 0, 0), (225, 235, 350, 100))
-    #pygame.draw.rect(screen, (255, 255, 255), (225, 235, 350, 100), 2)
-    #Max lean
-    #pygame.draw.rect(screen, (0, 0, 0), (225, 235, 350, 100))
-    #pygame.draw.rect(screen, (255, 255, 255), (225, 235, 350, 100), 2)
+    pygame.draw.rect(screen, (0, 0, 0), (575, 235, 100, 100))
+    pygame.draw.rect(screen, (255, 255, 255), (575, 235, 100, 100), 2)
+    x_right = 667
+    text = font_3.render(f"{lean_corr}", True, (255, 255, 255))
+    text_x = x_right - text.get_width()
+    screen.blit(text, (text_x, 230))
+
+    #Lean Side
+    pygame.draw.rect(screen, (0, 0, 0), (150, 235, 75, 100))
+    pygame.draw.rect(screen, (255, 255, 255), (150, 235, 75, 100), 2)
+    if lean_side == 0: #right
+        screen.blit(font_2.render(f"R", True, (150, 150, 255)), (165, 235))
+    else: #left
+        screen.blit(font_2.render(f"L", True, (150, 150, 255)), (165, 235))
+    #Max lean --per side
+    pygame.draw.rect(screen, (0, 0, 0), (100, 340, 150, 70))
+    pygame.draw.rect(screen, (255, 255, 255), (100, 340, 150, 70), 2)
+    screen.blit(font_1_3.render(f"M", True, (150, 150, 255)), (108, 345))
+    screen.blit(font_1_3.render(f"L", True, (150, 150, 255)), (108, 375))
+    screen.blit(font_2.render(f"{maxl}", True, (150, 150, 255)), (155, 329))
+
+    pygame.draw.rect(screen, (0, 0, 0), (550, 340, 150, 70))
+    pygame.draw.rect(screen, (255, 255, 255), (550, 340, 150, 70), 2)
+    screen.blit(font_1_3.render(f"M", True, (150, 150, 255)), (558, 345))
+    screen.blit(font_1_3.render(f"R", True, (150, 150, 255)), (558, 375))
+    screen.blit(font_2.render(f"{maxr}", True, (150, 150, 255)), (605, 329))
 
 
 
