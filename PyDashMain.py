@@ -477,6 +477,12 @@ def draw_gforce():
     global maxg
     #defining maxg
 
+    #max function
+    absoluteg = math.sqrt(long**2 + lat**2)
+    if absoluteg > maxg:
+        maxg = round(absoluteg,3)
+
+
         #center graph
     cx = 375
     cy = 303
@@ -495,7 +501,7 @@ def draw_gforce():
     pygame.draw.rect(screen, (0, 0, 0), (2, 300, 180, 90))
     pygame.draw.rect(screen, (255, 255, 255), (2, 300, 180, 90), 2)
     screen.blit(font_1_4.render(f"long={long}", True, (255, 255, 255)), (10, 300))
-    screen.blit(font_1_4.render(f"lat={lat}", True, (255, 255, 255)), (10, 340))
+    screen.blit(font_1_4.render(f"  lat={lat}", True, (255, 255, 255)), (10, 340))
         #max values -- maybe just a single max value
     pygame.draw.rect(screen, (0, 0, 0), (580, 200, 200, 130))
     pygame.draw.rect(screen, (255, 255, 255), (580, 200, 200, 130), 2)
@@ -570,8 +576,8 @@ def draw_lean():
 
     if lean > maxr:
         maxr = round(abs(lean))
-    if lean < maxl:
-        maxl = round(abs(lean))
+    if lean < maxl: #whoop
+        maxl = round(lean)
 
     cx = 400
     cy = 285
@@ -666,12 +672,13 @@ def draw_lean():
         screen.blit(font_2.render(f"R", True, (150, 150, 255)), (165, 235))
     else: #left
         screen.blit(font_2.render(f"L", True, (150, 150, 255)), (165, 235))
+
     #Max lean --per side
     pygame.draw.rect(screen, (0, 0, 0), (100, 340, 150, 70))
     pygame.draw.rect(screen, (255, 255, 255), (100, 340, 150, 70), 2)
     screen.blit(font_1_3.render(f"M", True, (150, 150, 255)), (108, 345))
     screen.blit(font_1_3.render(f"L", True, (150, 150, 255)), (108, 375))
-    screen.blit(font_2.render(f"{maxl}", True, (150, 150, 255)), (155, 329))
+    screen.blit(font_2.render(f"{abs(maxl)}", True, (150, 150, 255)), (155, 329))
 
     pygame.draw.rect(screen, (0, 0, 0), (550, 340, 150, 70))
     pygame.draw.rect(screen, (255, 255, 255), (550, 340, 150, 70), 2)
