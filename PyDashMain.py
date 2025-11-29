@@ -526,7 +526,7 @@ def draw_lean():
     pygame.draw.line(screen, colour, (cx + 175,cy), (cx - 175,cy), 2)
 
         #lean needle
-
+    #lean -- this is my variable, there are many like it but this one is mine
 
         #lean stats
     #Current Lean
