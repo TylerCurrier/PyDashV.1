@@ -54,6 +54,13 @@ imu_data = {
     "lean": 0,
     "pitch": 0
 }
+#y long
+#x lat
+#z vert
+#Remember the orientation -- and remember to correct the lateral values for lean on the arduino
+
+#maxg defined globally, see next comment
+maxg = 0
 
 #The max lean values have to be definied globally to prevent overwriting in their function
 maxl = 0
@@ -462,8 +469,28 @@ def draw_laptimer():
 
 def draw_gforce():
 
-    pygame.draw.rect(screen, (0, 0, 0), (400, 200, 100, 128))
-    pygame.draw.rect(screen, (255, 255, 255), (400, 200, 100, 128), 2)
+    #variables
+    long = imu_data["ay"] #y axis
+    lat = imu_data["ax"] #x axis
+
+        #center graph
+    cx = 375
+    cy = 302
+    radius = 175
+    sradius = 175 / 1.5
+    pygame.draw.circle(screen, (255, 255, 255), (cx, cy), radius +2, 8)
+    pygame.draw.circle(screen, (0, 0, 0), (cx, cy), radius-2)  # filled
+    pygame.draw.line(screen, (255,255,255), (cx - radius, cy), (cx + radius, cy), 1) #vert
+    pygame.draw.line(screen, (255,255,255), (cx, cy - radius), (cx, cy + radius), 1) #hor
+        #1g tick --- outer circle is 1.5, scale accordingly
+    pygame.draw.circle(screen, (255, 255, 255), (cx, cy), sradius, 1)
+        #g dot
+    pygame.draw.circle(screen, (200, 50, 50), (cx+sradius*lat, cy+sradius*long), 10, 10)
+    screen.blit(font_1_4.render(f"long={long}", True, (255, 255, 255)), (600, 230))
+    screen.blit(font_1_4.render(f"lat={lat}", True, (255, 255, 255)), (600, 330))
+        #max values -- maybe just a single max value
+    #pygame.draw.rect(screen, (0, 0, 0), (400, 200, 100, 128))
+    #pygame.draw.rect(screen, (255, 255, 255), (400, 200, 100, 128), 2)
 
 # ============================================================
 #               LEAN FUNCTION
@@ -498,11 +525,14 @@ def draw_lean():
     r_in = 130
     width = 2
     a5d = 50
-    a5r = math.radians(a5d)
+    phi5d = 90 - a5d
+    a5r = math.radians(phi5d)
     a4d = 40
-    a4r = math.radians(a4d)
+    phi4d = 90 - a4d
+    a4r = math.radians(phi4d)
     a3d = 30
-    a3r = math.radians(a3d)
+    phi3d = 90 - a3d
+    a3r = math.radians(phi3d)
     colour = (255,255,255)
         #50 ticks =======
     #start
@@ -544,7 +574,20 @@ def draw_lean():
     pygame.draw.line(screen, colour, (cx + 175,cy), (cx - 175,cy), 2)
 
         #lean needle
-    #lean -- this is my variable, there are many like it but this one is mine
+    #lean = -- this is my variable, there are many like it but this one is mine
+    leanphi = 90 - abs(lean)
+    leanphir = math.radians(leanphi)
+    nwidth = 8 #needle width
+    ncolor = (100,255,100)#needle color
+    lx = radius*math.cos(leanphir)
+    ly = radius*math.sin(leanphir)
+
+    if lean == 0: #vertical Line
+        pygame.draw.line(screen, ncolor, (cx, cy + radius), (cx , cy - radius), nwidth)
+    elif lean < 0: # Right Lean Q4, Q2
+        pygame.draw.line(screen, ncolor, (cx - lx, cy + ly), (cx + lx, cy - ly), nwidth)
+    else: #left lean Q1, Q3
+        pygame.draw.line(screen, ncolor, (cx + lx, cy + ly), (cx - lx, cy - ly), nwidth)
 
         #lean stats
     #Current Lean
@@ -603,11 +646,11 @@ def draw_base_layout():
     pygame.draw.rect(screen, (0, 0, 0), (0, 420, 140, 60))
     pygame.draw.rect(screen, (255, 255, 255), (0, 420, 140, 60), 3)
         #time
-    pygame.draw.rect(screen, (0, 0, 0), (640, 420, 160, 60))
-    pygame.draw.rect(screen, (255, 255, 255), (640, 420, 160, 60), 3)
+    pygame.draw.rect(screen, (0, 0, 0), (670, 420, 130, 60))
+    pygame.draw.rect(screen, (255, 255, 255), (670, 420, 130, 60), 3)
         #connections
-    pygame.draw.rect(screen, (0, 0, 0), (480, 420, 160, 60))
-    pygame.draw.rect(screen, (255, 255, 255), (480, 420, 160, 60), 3)
+    pygame.draw.rect(screen, (0, 0, 0), (510, 420, 160, 60))
+    pygame.draw.rect(screen, (255, 255, 255), (510, 420, 160, 60), 3)
 
     #Base Layout data
         #Gear
@@ -624,8 +667,10 @@ def draw_base_layout():
         #Coolant Temp
     draw_coolant_temp(screen, coolant, x_right=90, y=421)
 
-        #Time
+        #Time 24h
     #need to get the can hat to see the rtc and which one it is.
+    #standin time
+    screen.blit(font_1_5.render(f"00:00", True, (255, 255, 255)), (685, 422))
         #Connections
 
 
