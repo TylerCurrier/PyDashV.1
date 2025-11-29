@@ -424,12 +424,42 @@ def draw_speed(screen, speed, x_right, y):
 
 def draw_laptimer():
 
+    #Current Time
+    pygame.draw.rect(screen, (0, 0, 0), (160, 135, 460, 100)) #(x,y,w,h)
+    pygame.draw.rect(screen, (255, 255, 255), (160, 135, 460, 100), 2)
+    screen.blit(font_1_4.render(f"C", True, (255, 255, 255)), (165, 130))
+    screen.blit(font_1_4.render(f"U", True, (255, 255, 255)), (165, 161))
+    screen.blit(font_1_4.render(f"R", True, (255, 255, 255)), (165, 192))
+        #placeholder text -replace with function for time
+    screen.blit(font_4.render(f" 00:00.000", True, (255, 255, 255)), (220, 127))
+
+    #last Time
+    pygame.draw.rect(screen, (0, 0, 0), (220, 245, 400, 80))  # (x,y,w,h)
+    pygame.draw.rect(screen, (255, 255, 255), (220, 245, 400, 80), 2)
+    screen.blit(font_1_3.render(f"L", True, (255, 255, 255)), (227, 244))
+    screen.blit(font_1_3.render(f"A", True, (255, 255, 255)), (225, 269))
+    screen.blit(font_1_3.render(f"S", True, (255, 255, 255)), (225, 294))
+        #placeholder text -replace with function for time
+    screen.blit(font_2.render(f" 00:00.000", True, (255, 255, 255)), (300, 240))
+
+    #Best Time
+    pygame.draw.rect(screen, (0, 0, 0), (220, 335, 400, 80))  # (x,y,w,h)
+    pygame.draw.rect(screen, (255, 255, 255), (220, 335, 400, 80), 2)
+    screen.blit(font_1_3.render(f"B", True, (255, 255, 255)), (225, 336))
+    screen.blit(font_1_3.render(f"E", True, (255, 255, 255)), (225, 361))
+    screen.blit(font_1_3.render(f"S", True, (255, 255, 255)), (225, 386))
+        #placeholder text -replace with function for time
+    screen.blit(font_2.render(f" 00:00.000", True, (255, 255, 255)), (300, 330))
+
+
 # ============================================================
 #               GFORCE FUNCTION
 # ============================================================
 
 def draw_gforce():
 
+    pygame.draw.rect(screen, (0, 0, 0), (400, 200, 100, 128))
+    pygame.draw.rect(screen, (255, 255, 255), (400, 200, 100, 128), 2)
 
 # ============================================================
 #               LEAN FUNCTION
@@ -437,12 +467,86 @@ def draw_gforce():
 
 def draw_lean():
 
+    cx = 400
+    cy = 285
+    radius = 150
+        #lean bounding box
+    pygame.draw.circle(screen, (255, 255, 255), (cx, cy), radius +2, 4)  # outline thickness 4
+    pygame.draw.rect(screen, (0, 0, 0), (225, 235, 350, 100))
+    pygame.draw.rect(screen, (255, 255, 255), (225, 235, 350, 100), 2)
+    pygame.draw.circle(screen, (0, 0, 0), (cx, cy), radius)  # filled
+
+    r_out = 150
+    r_in = 130
+    width = 2
+    a5d = 50
+    a5r = math.radians(a5d)
+    a4d = 40
+    a4r = math.radians(a4d)
+    a3d = 30
+    a3r = math.radians(a3d)
+    colour = (255,255,255)
+        #50 ticks =======
+    #start
+    sx5 = r_out*math.cos(a5r)
+    sy5 = r_out*math.sin(a5r)
+    #end
+    ex5 = r_in*math.cos(a5r)
+    ey5 = r_in*math.sin(a5r)
+    pygame.draw.line(screen, colour, (cx+sx5,cy+sy5), (cx+ex5,cy+ey5), width) #q1 +x +y
+    pygame.draw.line(screen, colour, (cx+sx5,cy-sy5), (cx+ex5,cy-ey5), width) #q2 +x -y
+    pygame.draw.line(screen, colour, (cx-sx5,cy-sy5), (cx-ex5,cy-ey5), width) #q3 -x -y
+    pygame.draw.line(screen, colour, (cx-sx5,cy+sy5), (cx-ex5,cy+ey5), width) #q4 -x +y
+
+        #40 ticks ======
+    # start
+    sx4 = r_out * math.cos(a4r)
+    sy4 = r_out * math.sin(a4r)
+    # end
+    ex4 = r_in * math.cos(a4r)
+    ey4 = r_in * math.sin(a4r)
+    pygame.draw.line(screen, colour, (cx + sx4, cy + sy4), (cx + ex4, cy + ey4), width)  # q1 +x +y
+    pygame.draw.line(screen, colour, (cx + sx4, cy - sy4), (cx + ex4, cy - ey4), width)  # q2 +x -y
+    pygame.draw.line(screen, colour, (cx - sx4, cy - sy4), (cx - ex4, cy - ey4), width)  # q3 -x -y
+    pygame.draw.line(screen, colour, (cx - sx4, cy + sy4), (cx - ex4, cy + ey4), width)  # q4 -x +y
+        #30 ticks ======
+    # start
+    sx3 = r_out * math.cos(a3r)
+    sy3 = r_out * math.sin(a3r)
+    # end
+    ex3 = r_in * math.cos(a3r)
+    ey3 = r_in * math.sin(a3r)
+    pygame.draw.line(screen, colour, (cx + sx3, cy + sy3), (cx + ex3, cy + ey3), width)  # q1 +x +y
+    pygame.draw.line(screen, colour, (cx + sx3, cy - sy3), (cx + ex3, cy - ey3), width)  # q2 +x -y
+    pygame.draw.line(screen, colour, (cx - sx3, cy - sy3), (cx - ex3, cy - ey3), width)  # q3 -x -y
+    pygame.draw.line(screen, colour, (cx - sx3, cy + sy3), (cx - ex3, cy + ey3), width)  # q4 -x +y
+
+    #Zeroes
+    pygame.draw.line(screen, colour, (cx,cy + radius), (cx,cy -radius), 2)
+    pygame.draw.line(screen, colour, (cx + 175,cy), (cx - 175,cy), 2)
+
+        #lean needle
+
+
+        #lean stats
+    #Current Lean
+    #pygame.draw.rect(screen, (0, 0, 0), (225, 235, 350, 100))
+    #pygame.draw.rect(screen, (255, 255, 255), (225, 235, 350, 100), 2)
+    #Max lean
+    #pygame.draw.rect(screen, (0, 0, 0), (225, 235, 350, 100))
+    #pygame.draw.rect(screen, (255, 255, 255), (225, 235, 350, 100), 2)
+
+
+
+
 # ============================================================
 #               TRAIL FUNCTION
 # ============================================================
 
 def draw_trail():
 
+    pygame.draw.rect(screen, (0, 0, 0), (400, 200, 100, 128))
+    pygame.draw.rect(screen, (255, 255, 255), (400, 200, 100, 128), 2)
 
 # ============================================================
 #               BASE LAYOUT FUNCTION
