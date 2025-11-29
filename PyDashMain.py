@@ -59,8 +59,10 @@ imu_data = {
 #z vert
 #Remember the orientation -- and remember to correct the lateral values for lean on the arduino
 
-#maxg defined globally, see next comment
+#maxg defined globally, see maxl comment
 maxg = 0
+#saving g history for g_dot
+g_history = [] #(timestamp, x, y)
 
 #The max lean values have to be definied globally to prevent overwriting in their function
 maxl = 0
@@ -472,10 +474,12 @@ def draw_gforce():
     #variables
     long = imu_data["ay"] #y axis
     lat = imu_data["ax"] #x axis
+    global maxg
+    #defining maxg
 
         #center graph
     cx = 375
-    cy = 302
+    cy = 303
     radius = 175
     sradius = 175 / 1.5
     pygame.draw.circle(screen, (255, 255, 255), (cx, cy), radius +2, 8)
@@ -485,12 +489,69 @@ def draw_gforce():
         #1g tick --- outer circle is 1.5, scale accordingly
     pygame.draw.circle(screen, (255, 255, 255), (cx, cy), sradius, 1)
         #g dot
-    pygame.draw.circle(screen, (200, 50, 50), (cx+sradius*lat, cy+sradius*long), 10, 10)
-    screen.blit(font_1_4.render(f"long={long}", True, (255, 255, 255)), (600, 230))
-    screen.blit(font_1_4.render(f"lat={lat}", True, (255, 255, 255)), (600, 330))
+    draw_g_dot()
+    #pygame.draw.circle(screen, (200, 50, 50), (cx+sradius*lat, cy+sradius*long), 10, 10)
+        #Current Values
+    pygame.draw.rect(screen, (0, 0, 0), (2, 300, 180, 90))
+    pygame.draw.rect(screen, (255, 255, 255), (2, 300, 180, 90), 2)
+    screen.blit(font_1_4.render(f"long={long}", True, (255, 255, 255)), (10, 300))
+    screen.blit(font_1_4.render(f"lat={lat}", True, (255, 255, 255)), (10, 340))
         #max values -- maybe just a single max value
-    #pygame.draw.rect(screen, (0, 0, 0), (400, 200, 100, 128))
-    #pygame.draw.rect(screen, (255, 255, 255), (400, 200, 100, 128), 2)
+    pygame.draw.rect(screen, (0, 0, 0), (580, 200, 200, 130))
+    pygame.draw.rect(screen, (255, 255, 255), (580, 200, 200, 130), 2)
+    screen.blit(font_1_4.render(f"MAX - G", True, (255, 255, 255)), (600, 200))
+    screen.blit(font_1_4.render(f"{maxg}", True, (255, 255, 255)), (600, 250))
+
+# ============================================================
+#               G DOT FUNCTION
+# ============================================================
+
+def draw_g_dot():
+    #carry over variables -MUST be same as in GFORCE FUNCTION
+    cx = 375
+    cy = 303
+    sradius = 175 / 1.5
+    long = imu_data["ay"]  # y axis
+    lat = imu_data["ax"]  # x axis
+    global g_history
+
+    now = time.time()
+
+    # Compute current dot position
+    x = cx + sradius * lat
+    y = cy + sradius * long
+
+    # Add the dot EVERY FRAME
+    g_history.append((now, x, y))
+
+    # Keep only the last 10 seconds
+    g_history = [(t, gx, gy) for (t, gx, gy) in g_history if now - t <= 10]
+
+    # Draw the trail
+    for (t, gx, gy) in g_history:
+        age = now - t  # seconds old
+        fade = 1 - (age / 10)  # full fade over 10s (size/opacity)
+
+        # --- Size fade (12 → 3) ---
+        size = max(3, int(12 * fade))
+
+        # --- Opacity fade (255 → 40) ---
+        alpha = max(40, int(255 * fade))
+
+        # --- Faster color fade (3-second color window) ---
+        color_fade = max(0, 1 - (age / 3))  # 1 → 0 in 3 seconds
+
+        # Newest = green (0,255,0)
+        # Oldest = red (255,0,0)
+        r = int(255 * (1 - color_fade))  # becomes red quick
+        g = int(255 * color_fade)  # green disappears fast
+        b = 0
+
+        # Draw with alpha on a temporary surface
+        dot_surface = pygame.Surface((size * 2, size * 2), pygame.SRCALPHA)
+        pygame.draw.circle(dot_surface, (r, g, b, alpha), (size, size), size)
+        screen.blit(dot_surface, (gx - size, gy - size))
+
 
 # ============================================================
 #               LEAN FUNCTION
