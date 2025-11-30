@@ -284,12 +284,12 @@ def screen_1():
     #Load in base layout
     draw_base_layout()
 
-    #Main - specific functions
+    #Main Title
     pygame.draw.rect(screen, (0,0,0), (710, 126, 90, 50))
     pygame.draw.rect(screen, (255, 255, 255), (710, 126, 90, 50), 2)
     screen.blit(font_1_4.render(f"Main", True, (255, 255, 255)), (719, 128))
 
-        #Speed function
+    #Speed function
     draw_speed(screen,speed,x_right=530, y=125)
 
 #==============================================================================================================
@@ -303,11 +303,12 @@ def screen_2():
     #Load in base layout
     draw_base_layout()
 
-    #Laptimer - specific functions
+    #Laptimer title
     pygame.draw.rect(screen, (0, 0, 0), (655, 126, 145, 50))
     pygame.draw.rect(screen, (255, 255, 255), (655, 126, 145, 50), 2)
     screen.blit(font_1_4.render(f"Laptimer", True, (255, 255, 255)), (665, 128))
 
+    #Laptimer function
     draw_laptimer()
 
 #==============================================================================================================
@@ -321,11 +322,12 @@ def screen_3():
     #Load in base layout
     draw_base_layout()
 
-    #Lean - specific functions
+    #Lean title
     pygame.draw.rect(screen, (0, 0, 0), (710, 126, 90, 50))
     pygame.draw.rect(screen, (255, 255, 255), (710, 126, 90, 50), 2)
     screen.blit(font_1_4.render(f"Lean", True, (255, 255, 255)), (719, 128))
 
+    #lean function
     draw_lean()
 
 #==============================================================================================================
@@ -339,11 +341,12 @@ def screen_4():
     #Load in base layout
     draw_base_layout()
 
-    #GForce - specific functions
+    #GForce Title
     pygame.draw.rect(screen, (0, 0, 0), (665, 126, 135, 50))
     pygame.draw.rect(screen, (255, 255, 255), (665, 126, 135, 50), 2)
     screen.blit(font_1_4.render(f"G-Force", True, (255, 255, 255)), (673, 128))
 
+    #gforce function
     draw_gforce()
 
 #==============================================================================================================
@@ -357,11 +360,12 @@ def screen_5():
     #Load in base layout
     draw_base_layout()
 
-    #Trail - specific functions
+    #Trail title
     pygame.draw.rect(screen, (0, 0, 0), (723, 126, 77, 50))
     pygame.draw.rect(screen, (255, 255, 255), (723, 126, 77, 50), 2)
     screen.blit(font_1_4.render(f"Trail", True, (255, 255, 255)), (730, 128))
 
+    #trail function
     draw_trail()
 
 
@@ -377,6 +381,7 @@ flash_interval = 0.10
 def draw_rpm_bar(surface, rpm, max_rpm=16000):
     global flash_state, last_flash
 
+    #bar parameters
     x, y, width, height = 0, 0, 800, 100
     pygame.draw.rect(surface, (50, 50, 50), (x, y, width, height))
 
@@ -384,6 +389,7 @@ def draw_rpm_bar(surface, rpm, max_rpm=16000):
     fill_width = int((rpm / max_rpm) * width)
     pct = rpm / max_rpm
 
+    #percentage logic gate for changing colors and flashing
     if pct < 0.7:
         color = (100, 140, 255)
     elif pct < 0.8:
@@ -395,9 +401,10 @@ def draw_rpm_bar(surface, rpm, max_rpm=16000):
             last_flash = now
         color = (255, 0, 0) if flash_state else (120, 0, 0)
 
+    #bar rendering
     pygame.draw.rect(surface, color, (x, y, fill_width, height))
     pygame.draw.rect(surface, (255, 255, 255), (x, y, width, height), 4)
-    #tick marks major
+    #tick marks on bar
     pygame.draw.line(screen, (255,255,255), (50,107), (50,80), 2)
     pygame.draw.line(screen, (255,255,255), (100,107), (100,80), 2)
     pygame.draw.line(screen, (255,255,255), (150,107), (150,80), 2)
@@ -421,7 +428,7 @@ def draw_rpm_bar(surface, rpm, max_rpm=16000):
 # ============================================================
 
 def draw_coolant_temp(screen, coolant, x_right, y):
-    # --- Pick color based on temperature ---
+    #Color picker for temperature (adjust with more research)
     if coolant < 80:
         color = (100, 180, 255)   # light blue
     elif coolant < 100:
@@ -429,15 +436,14 @@ def draw_coolant_temp(screen, coolant, x_right, y):
     else:
         color = (255, 150, 0)     # orange
 
-    # --- Render text ---
+    #Generate text
     text = font_1_5.render(f"{coolant}", True, color)
 
-    # --- Right alignment: shift left by text width ---
+    #Right alignment function
     text_x = x_right - text.get_width()
 
-    # --- Draw on screen ---
+    #Render and raw on screen
     screen.blit(text, (text_x, y))
-
     screen.blit(font_1_5.render(f" C", True, (255, 255, 255)), (90, 421))
 
 
@@ -447,17 +453,19 @@ def draw_coolant_temp(screen, coolant, x_right, y):
 
 def draw_speed(screen, speed, x_right, y):
 
+    #speed is most likely imported as kph, so may need to switch to mph once i can confirm
+
     #Draw bounding box
     pygame.draw.rect(screen, (0, 0, 0), (200, 150, 440, 210))
     pygame.draw.rect(screen, (255, 255, 255), (200, 150, 440, 210), 4)
 
-    #Render text
+    #Generate text
     text = font_12.render(f"{speed}", True, (255,255,255))
 
-    #Right alignment: shift left by text width
+    #Right alignment function
     text_x = x_right - text.get_width()
 
-    # Draw Speed on screen
+    #Render draw Speed on screen
     screen.blit(text, (text_x, y))
 
     #Vertical MPH text #MPH variable may be kph from can so may need to be converted earlier in code
@@ -518,30 +526,30 @@ def draw_gforce():
         maxg = round(absoluteg,3)
 
 
-        #center graph
-    cx = 375
-    cy = 303
-    radius = 175
-    sradius = 175 / 1.5
+    #center graph
+    cx = 375 #center x coord
+    cy = 303 #center y coord
+    radius = 175 #Full ouside radius
+    sradius = 175 / 1.5 #scaled radius for outside being 1.5 G and 175 pixels
     pygame.draw.circle(screen, (255, 255, 255), (cx, cy), radius +2, 8)
     pygame.draw.circle(screen, (0, 0, 0), (cx, cy), radius-2)  # filled
     pygame.draw.line(screen, (255,255,255), (cx - radius, cy), (cx + radius, cy), 1) #vert
     pygame.draw.line(screen, (255,255,255), (cx, cy - radius), (cx, cy + radius), 1) #hor
         #1g tick --- outer circle is 1.5, scale accordingly
     pygame.draw.circle(screen, (255, 255, 255), (cx, cy), sradius, 1)
-        #g dot
+        #g dot function
     draw_g_dot()
-    #pygame.draw.circle(screen, (200, 50, 50), (cx+sradius*lat, cy+sradius*long), 10, 10)
         #Current Values
     pygame.draw.rect(screen, (0, 0, 0), (2, 300, 180, 90))
     pygame.draw.rect(screen, (255, 255, 255), (2, 300, 180, 90), 2)
     screen.blit(font_1_4.render(f"long={long}", True, (255, 255, 255)), (10, 300))
     screen.blit(font_1_4.render(f"  lat={lat}", True, (255, 255, 255)), (10, 340))
-        #max values -- maybe just a single max value
+        #max values -- fo rnow just a single max value for total g force, combined lat long
     pygame.draw.rect(screen, (0, 0, 0), (580, 200, 200, 130))
     pygame.draw.rect(screen, (255, 255, 255), (580, 200, 200, 130), 2)
     screen.blit(font_1_4.render(f"MAX - G", True, (255, 255, 255)), (600, 200))
     screen.blit(font_1_4.render(f"{maxg}", True, (255, 255, 255)), (600, 250))
+
 
 # ============================================================
 #               G DOT FUNCTION
@@ -551,10 +559,10 @@ def draw_g_dot():
     #carry over variables -MUST be same as in GFORCE FUNCTION
     cx = 375
     cy = 303
-    sradius = 175 / 1.5
+    sradius = 175 / 1.5 #scaled radius, same as sradius from previosu function
     long = imu_data["ay"]  # y axis
     lat = imu_data["ax"]  # x axis
-    global g_history
+    global g_history #calling global g history variable
 
     now = time.time()
 
@@ -573,22 +581,22 @@ def draw_g_dot():
         age = now - t  # seconds old
         fade = 1 - (age / 10)  # full fade over 10s (size/opacity)
 
-        # --- Size fade (12 → 3) ---
+        #Size fade (12 → 3)
         size = max(3, int(12 * fade))
 
-        # --- Opacity fade (255 → 40) ---
+        #Opacity fade (255 → 40)
         alpha = max(40, int(255 * fade))
 
-        # --- Faster color fade (3-second color window) ---
+        #Faster color fade (3-second color window)
         color_fade = max(0, 1 - (age / 3))  # 1 → 0 in 3 seconds
 
-        # Newest = green (0,255,0)
-        # Oldest = red (255,0,0)
+        #Newest = green (0,255,0)
+        #Oldest = red (255,0,0)
         r = int(255 * (1 - color_fade))  # becomes red quick
         g = int(255 * color_fade)  # green disappears fast
         b = 0
 
-        # Draw with alpha on a temporary surface
+        #Draw with alpha on a temporary surface
         dot_surface = pygame.Surface((size * 2, size * 2), pygame.SRCALPHA)
         pygame.draw.circle(dot_surface, (r, g, b, alpha), (size, size), size)
         screen.blit(dot_surface, (gx - size, gy - size))
@@ -600,47 +608,50 @@ def draw_g_dot():
 
 def draw_lean():
 
-    lean = imu_data["lean"]
+    lean = imu_data["lean"] #grabbing lean variable from IMU arduino
     if lean >= 0:
         lean_side = 0 #=right
     else:
         lean_side = 1 #=left
     lean_corr = round(abs(lean)) #corrected lean abs and round
 
-    global maxl, maxr
+    global maxl, maxr #globally stored max left and max right
 
+    #maximum reassignment... if lean is greater than current max, make it equal to current max
     if lean > maxr:
         maxr = round(abs(lean))
     if lean < maxl: #whoop
         maxl = round(lean)
 
-    cx = 400
-    cy = 285
-    radius = 150
+    cx = 400 #center x coord
+    cy = 285 #center y coord
+    radius = 150 #bounding circle radius
         #lean bounding box
     pygame.draw.circle(screen, (255, 255, 255), (cx, cy), radius +2, 4)  # outline thickness 4
     pygame.draw.rect(screen, (0, 0, 0), (225, 235, 350, 100))
     pygame.draw.rect(screen, (255, 255, 255), (225, 235, 350, 100), 2)
     pygame.draw.circle(screen, (0, 0, 0), (cx, cy), radius)  # filled
 
-    r_out = 150
-    r_in = 130
-    width = 2
-    a5d = 50
-    phi5d = 90 - a5d
-    a5r = math.radians(phi5d)
-    a4d = 40
-    phi4d = 90 - a4d
-    a4r = math.radians(phi4d)
-    a3d = 30
-    phi3d = 90 - a3d
-    a3r = math.radians(phi3d)
-    colour = (255,255,255)
-        #50 ticks =======
-    #start
+    #outer radius lean ticks
+    r_out = 150                  #outer radius for ticks
+    r_in = 130                   #inner radius for ticks - defining tick length
+    width = 2                    #tick width
+    a5d = 50                     #50 degree tick
+    phi5d = 90 - a5d             #50 inverted for top down lean
+    a5r = math.radians(phi5d)    #50 inv converted to radians
+    a4d = 40                     #40 degree tick
+    phi4d = 90 - a4d             #40 inverted for top down lean
+    a4r = math.radians(phi4d)    #40 inv converted to radians
+    a3d = 30                     #30 degree tick
+    phi3d = 90 - a3d             #30 inverted for top down lean
+    a3r = math.radians(phi3d)    #30 inv converted to radians
+    colour = (255,255,255)       #Tick color
+
+    #50 ticks =======
+    #Start
     sx5 = r_out*math.cos(a5r)
     sy5 = r_out*math.sin(a5r)
-    #end
+    #End
     ex5 = r_in*math.cos(a5r)
     ey5 = r_in*math.sin(a5r)
     pygame.draw.line(screen, colour, (cx+sx5,cy+sy5), (cx+ex5,cy+ey5), width) #q1 +x +y
@@ -648,22 +659,22 @@ def draw_lean():
     pygame.draw.line(screen, colour, (cx-sx5,cy-sy5), (cx-ex5,cy-ey5), width) #q3 -x -y
     pygame.draw.line(screen, colour, (cx-sx5,cy+sy5), (cx-ex5,cy+ey5), width) #q4 -x +y
 
-        #40 ticks ======
-    # start
+    #40 ticks ======
+    #Start
     sx4 = r_out * math.cos(a4r)
     sy4 = r_out * math.sin(a4r)
-    # end
+    #End
     ex4 = r_in * math.cos(a4r)
     ey4 = r_in * math.sin(a4r)
     pygame.draw.line(screen, colour, (cx + sx4, cy + sy4), (cx + ex4, cy + ey4), width)  # q1 +x +y
     pygame.draw.line(screen, colour, (cx + sx4, cy - sy4), (cx + ex4, cy - ey4), width)  # q2 +x -y
     pygame.draw.line(screen, colour, (cx - sx4, cy - sy4), (cx - ex4, cy - ey4), width)  # q3 -x -y
     pygame.draw.line(screen, colour, (cx - sx4, cy + sy4), (cx - ex4, cy + ey4), width)  # q4 -x +y
-        #30 ticks ======
-    # start
+    #30 ticks ======
+    #Start
     sx3 = r_out * math.cos(a3r)
     sy3 = r_out * math.sin(a3r)
-    # end
+    #End
     ex3 = r_in * math.cos(a3r)
     ey3 = r_in * math.sin(a3r)
     pygame.draw.line(screen, colour, (cx + sx3, cy + sy3), (cx + ex3, cy + ey3), width)  # q1 +x +y
@@ -672,18 +683,19 @@ def draw_lean():
     pygame.draw.line(screen, colour, (cx - sx3, cy + sy3), (cx - ex3, cy + ey3), width)  # q4 -x +y
 
     #Zeroes
-    pygame.draw.line(screen, colour, (cx,cy + radius), (cx,cy -radius), 2)
-    pygame.draw.line(screen, colour, (cx + 175,cy), (cx - 175,cy), 2)
+    pygame.draw.line(screen, colour, (cx,cy + radius), (cx,cy -radius), 2) #Vertical Line
+    pygame.draw.line(screen, colour, (cx + 175,cy), (cx - 175,cy), 2)      #Horizontal Line
 
-        #lean needle
+    #lean needle
     #lean = -- this is my variable, there are many like it but this one is mine
-    leanphi = 90 - abs(lean)
-    leanphir = math.radians(leanphi)
-    nwidth = 8 #needle width
-    ncolor = (100,255,100)#needle color
-    lx = radius*math.cos(leanphir)
-    ly = radius*math.sin(leanphir)
+    leanphi = 90 - abs(lean)                #lean inverted
+    leanphir = math.radians(leanphi)        #lean inv converted to radians
+    nwidth = 8                              #needle width
+    ncolor = (100,255,100)                  #needle color
+    lx = radius*math.cos(leanphir)          #x coord of single quad value
+    ly = radius*math.sin(leanphir)          #y coord of single quad value
 
+    #logic check to see which quadrants x and y coords need to be set to
     if lean == 0: #vertical Line
         pygame.draw.line(screen, ncolor, (cx, cy + radius), (cx , cy - radius), nwidth)
     elif lean < 0: # Right Lean Q4, Q2
@@ -691,7 +703,7 @@ def draw_lean():
     else: #left lean Q1, Q3
         pygame.draw.line(screen, ncolor, (cx + lx, cy + ly), (cx - lx, cy - ly), nwidth)
 
-        #lean stats
+    #lean stats
     #Current Lean
     pygame.draw.rect(screen, (0, 0, 0), (575, 235, 100, 100))
     pygame.draw.rect(screen, (255, 255, 255), (575, 235, 100, 100), 2)
