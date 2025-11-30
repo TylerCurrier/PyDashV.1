@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1614f22e-7a5e-4e9b-aa48-d929013fc378" name="Changes" comment="readme">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Images/bg_main.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PyDashMain.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyDashMain.py" afterDir="false" />
+    <list default="true" id="1614f22e-7a5e-4e9b-aa48-d929013fc378" name="Changes" comment="Comments">
+      <change beforePath="$PROJECT_DIR$/Arduino/Nano_IMU_POT" beforeDir="false" afterPath="$PROJECT_DIR$/Arduino/Nano_IMU_POT" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +79,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1763670105247</updated>
-      <workItem from="1763670106411" duration="26817000" />
+      <workItem from="1763670106411" duration="60038000" />
     </task>
     <task id="LOCAL-00001" summary="commit start">
       <option name="closed" value="true" />
@@ -203,7 +201,159 @@
       <option name="project" value="LOCAL" />
       <updated>1763998353325</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Better layout">
+      <option name="closed" value="true" />
+      <created>1764288078982</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1764288078982</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Better layout">
+      <option name="closed" value="true" />
+      <created>1764289482275</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1764289482275</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Better layout">
+      <option name="closed" value="true" />
+      <created>1764290241930</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1764290241930</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Screen Setups">
+      <option name="closed" value="true" />
+      <created>1764377600206</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1764377600206</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Lean additions">
+      <option name="closed" value="true" />
+      <created>1764383959529</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1764383959529</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Lean additions">
+      <option name="closed" value="true" />
+      <created>1764384047252</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1764384047252</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Lean additions">
+      <option name="closed" value="true" />
+      <created>1764391410383</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1764391410383</updated>
+    </task>
+    <task id="LOCAL-00023" summary="gforce and lean additions">
+      <option name="closed" value="true" />
+      <created>1764441145902</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1764441145902</updated>
+    </task>
+    <task id="LOCAL-00024" summary="gforce gdot">
+      <option name="closed" value="true" />
+      <created>1764453018137</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1764453018137</updated>
+    </task>
+    <task id="LOCAL-00025" summary="lean logic">
+      <option name="closed" value="true" />
+      <created>1764454163160</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1764454163160</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Trail screen">
+      <option name="closed" value="true" />
+      <created>1764471373270</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1764471373270</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Layout Improvements">
+      <option name="closed" value="true" />
+      <created>1764476657577</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1764476657577</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Layout Improvements">
+      <option name="closed" value="true" />
+      <created>1764476740863</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1764476740863</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Read Me">
+      <option name="closed" value="true" />
+      <created>1764476789002</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1764476789002</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Read Me">
+      <option name="closed" value="true" />
+      <created>1764476905177</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1764476905177</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Read Me">
+      <option name="closed" value="true" />
+      <created>1764476945794</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1764476945794</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Read Me">
+      <option name="closed" value="true" />
+      <created>1764477008322</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1764477008322</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Read Me">
+      <option name="closed" value="true" />
+      <created>1764479230871</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1764479230871</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Comments">
+      <option name="closed" value="true" />
+      <created>1764533730351</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1764533730351</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -215,10 +365,20 @@
     <MESSAGE value="Ard added" />
     <MESSAGE value="Ard up" />
     <MESSAGE value="readme" />
-    <option name="LAST_COMMIT_MESSAGE" value="readme" />
+    <MESSAGE value="Better layout" />
+    <MESSAGE value="Screen Setups" />
+    <MESSAGE value="Lean additions" />
+    <MESSAGE value="gforce and lean additions" />
+    <MESSAGE value="gforce gdot" />
+    <MESSAGE value="lean logic" />
+    <MESSAGE value="Trail screen" />
+    <MESSAGE value="Layout Improvements" />
+    <MESSAGE value="Read Me" />
+    <MESSAGE value="Comments" />
+    <option name="LAST_COMMIT_MESSAGE" value="Comments" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PyDashV_1$SerialTest.coverage" NAME="SerialTest Coverage Results" MODIFIED="1763767535513" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PyDashV_1$PyDashMain.coverage" NAME="PyDashMain Coverage Results" MODIFIED="1764287968614" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PyDashV_1$PyDashMain.coverage" NAME="PyDashMain Coverage Results" MODIFIED="1764532986947" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

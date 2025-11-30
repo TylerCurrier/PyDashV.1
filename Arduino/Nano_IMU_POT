@@ -1,10 +1,11 @@
+//Language = Arduino
 //This will be the main code for the ard nano running the IMU and brake transducer
 
 
 #include <Wire.h>
 
 
-// Your offsets from the calibration program:
+//Offsets from the calibration program:
 int16_t ax_offset = -1628;
 int16_t ay_offset = 273;
 int16_t az_offset = 3274;
@@ -84,6 +85,9 @@ void loop() {
 
 
   Serial.println(angle);
+
+  //Make new program at this point, but integrate earlier code. Angle is outputting correctly, but also need to make sure we are also putting out acceleration data.
+  //As well as adding in transducer code, set up now as a rotary potentiometer 0-1900 psi
 }
 
 
