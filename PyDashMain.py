@@ -1,5 +1,6 @@
 # PyDashMain V2.1
-# Tyler Currier
+# Author: Tyler Currier
+# Latest Revision 11/29/2025
 
 # Imported libraries
 import time
@@ -14,26 +15,29 @@ import board
 #from datetime import datetime
 
 # ============================================================
-#              SELECT INPUT MODE ("REAL" or "FAKE")
+#              INPUT MODE ("REAL" or "FAKE")
 # ============================================================
-
+#Real input mode is normal operations, fake is for generated data from single arduino for GUI setup
 INPUT_MODE = "FAKE"  # <-- CHANGE THIS ONE VARIABLE
 
 # ============================================================
-#                  USER SETTINGS
+#                  USER SETUP
 # ============================================================
+#Image imports
 IMAGE_DIR = "images/"
 SPLASH_IMAGE = IMAGE_DIR + "splash.jpg"
 BG_IMAGE = IMAGE_DIR + "mainback.jpg"
 
+#Arduino Channel
 SERIAL_PORT = "COM6"
 SERIAL_BAUD = 115200
 
+#CAN Channel
 CAN_CHANNEL = "can0"
 CAN_BITRATE = 500000
 FPS = 30
 
-# CAN IDs
+#CAN IDs
 CAN_ID_RPM = 0x100
 CAN_ID_SPEED = 0x101
 CAN_ID_GEAR = 0x102
@@ -83,24 +87,20 @@ imu_data = {
 #z vert
 #Remember the orientation -- and remember to correct the lateral values for lean on the arduino
 
-#maxg defined globally, see maxl comment
-maxg = 0
-#saving g history for g_dot
-g_history = [] #(timestamp, x, y)
+#Max values have to be definied globally to prevent overwriting within functions
+maxg = 0 #Max GForces
+maxl = 0 #Max left lean
+maxr = 0 #max right lean
+maxbrake = 0 #Maximum brake pressure
 
-#The max lean values have to be definied globally to prevent overwriting in their function
-maxl = 0
-maxr = 0
+#saving g history for g_dot usage
+g_history = [] #(timestamp, x, y)
 
 #Trail Graph Handling
 graph_duration = 20.0 #seconds
 lean_history = [] #list of (timestamp, value)
 brake_history = []
 throttle_history = []
-
-#maximum brake pressure
-maxbrake = 0
-
 
 
 # ============================================================
@@ -209,7 +209,7 @@ def read_serial(ser):
 
 
 # ============================================================
-#               PYGAME INIT
+#               PYGAME INITIALIZATION
 # ============================================================
 
 pygame.init()
@@ -250,12 +250,11 @@ def load_bg(path):
         print(f"[WARNING] Missing {path}")
         return None
 
-
 bg_main = load_bg(BG_IMAGE)
 
 
 # ============================================================
-#               SPLASH
+#               SPLASH SCREEN (for booting)
 # ============================================================
 
 def show_splash():
@@ -273,6 +272,8 @@ def show_splash():
 #               SCREEN FUNCTIONS
 # ============================================================
 
+#5 Screens in order: Main, laptimer, Lean, GForces, Trail
+
 #Main Screen
 def screen_1():
     if bg_main:
@@ -280,7 +281,7 @@ def screen_1():
     else:
         screen.fill((0, 0, 0))
 
-    #base in
+    #Load in base layout
     draw_base_layout()
 
     #Main - specific functions
@@ -288,7 +289,7 @@ def screen_1():
     pygame.draw.rect(screen, (255, 255, 255), (710, 126, 90, 50), 2)
     screen.blit(font_1_4.render(f"Main", True, (255, 255, 255)), (719, 128))
 
-        # speed
+        #Speed function
     draw_speed(screen,speed,x_right=530, y=125)
 
 #==============================================================================================================
@@ -299,7 +300,7 @@ def screen_2():
     else:
         screen.fill((0, 0, 0))
 
-    #base in
+    #Load in base layout
     draw_base_layout()
 
     #Laptimer - specific functions
@@ -317,7 +318,7 @@ def screen_3():
     else:
         screen.fill((0, 0, 0))
 
-    #base in
+    #Load in base layout
     draw_base_layout()
 
     #Lean - specific functions
@@ -335,7 +336,7 @@ def screen_4():
     else:
         screen.fill((0, 0, 0))
 
-    #base in
+    #Load in base layout
     draw_base_layout()
 
     #GForce - specific functions
@@ -353,7 +354,7 @@ def screen_5():
     else:
         screen.fill((0, 0, 0))
 
-    #base in
+    #Load in base layout
     draw_base_layout()
 
     #Trail - specific functions
