@@ -13,9 +13,7 @@ $$ |      \$$$$$$$ |$$$$$$$  |$$ |  $$ |\$$$$$$  |$$ |  $$ |         \$  /$$\ $$
 ```
 
 
-``Author: Tyler Currier``
-
-``Latest Revision: November 1st, 2025``
-
-``All material is intellectual property of authors and organization``
+``Author: Tyler Currier
+Latest Revision: November 1st, 2025
+All material is intellectual property of authors and organization``
 
