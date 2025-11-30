@@ -7,6 +7,11 @@ import pygame
 import serial
 import can
 import math
+#RTC Libs
+import board
+#import busio
+#import adafruit_pcf8523
+#from datetime import datetime
 
 # ============================================================
 #              SELECT INPUT MODE ("REAL" or "FAKE")
@@ -37,7 +42,26 @@ CAN_ID_IAT = 0x104
 CAN_ID_TPS = 0x105
 
 # ============================================================
-#               GLOBAL DATA VARIABLES
+#               RTC SETUP
+# ============================================================
+""" !!!A lot more code will need to be written for this - but it is of low priority
+# Create an I2C connection
+i2c = busio.I2C(board.SCL, board.SDA)
+
+# Create the RTC object
+rtc = adafruit_pcf8523.PCF8523(i2c)
+
+# Read time from RTC
+current_time = rtc.datetime
+print("RTC Time:", current_time)
+
+# Example: print in a formatted nice way
+print("Formatted:", current_time.tm_year, current_time.tm_mon, current_time.tm_mday,
+      current_time.tm_hour, current_time.tm_min, current_time.tm_sec)
+"""
+
+# ============================================================
+#               GLOBAL DATA VARIABLES AND HANDLING
 # ============================================================
 
 rpm = 0
@@ -67,6 +91,16 @@ g_history = [] #(timestamp, x, y)
 #The max lean values have to be definied globally to prevent overwriting in their function
 maxl = 0
 maxr = 0
+
+#Trail Graph Handling
+graph_duration = 20.0 #seconds
+lean_history = [] #list of (timestamp, value)
+brake_history = []
+throttle_history = []
+
+#maximum brake pressure
+maxbrake = 0
+
 
 
 # ============================================================
@@ -687,16 +721,115 @@ def draw_lean():
     screen.blit(font_2.render(f"{maxr}", True, (150, 150, 255)), (605, 329))
 
 
-
-
 # ============================================================
 #               TRAIL FUNCTION
 # ============================================================
 
 def draw_trail():
 
-    pygame.draw.rect(screen, (0, 0, 0), (400, 200, 100, 128))
-    pygame.draw.rect(screen, (255, 255, 255), (400, 200, 100, 128), 2)
+    # Variables
+    brake_raw = imu_data["brake"]  # 0–1900 psi
+    brakemaxrange = 1000  # max psi to scale to 100%
+    throttle = tps  # 0–100 scale
+    lean_raw = abs(imu_data["lean"])  # degrees
+    leanrange = 50  # 50° = 100%
+    global graph_duration
+    global maxbrake
+
+    # Convert raw data to percent
+    brake = min(100, (brake_raw / brakemaxrange) * 100)
+    lean = min(100, (lean_raw / leanrange) * 100)
+    throttle = max(0, min(100, throttle))  # ensure 0–100
+
+    #stored maximum brake pressure
+    if brake_raw > maxbrake:
+        maxbrake = brake_raw
+
+    # Store history for graphing
+    add_sample(lean_history, lean)
+    add_sample(brake_history, brake)
+    add_sample(throttle_history, throttle)
+
+    # Background box
+    pygame.draw.rect(screen, (0, 0, 0), (142, 130, 575, 287))
+    pygame.draw.rect(screen, (255, 255, 255), (142, 130, 575, 287), 3)
+
+    # Ticks
+    pygame.draw.line(screen, (205, 205, 205), (150, 330), (670, 330), 1)
+    screen.blit(font_1_2.render("25", True, (255, 255, 255)), (675, 320))
+    pygame.draw.line(screen, (205, 205, 205), (150, 270), (670, 270), 1)
+    screen.blit(font_1_2.render("50", True, (255, 255, 255)), (675, 260))
+    pygame.draw.line(screen, (205, 205, 205), (150, 210), (670, 210), 1)
+    screen.blit(font_1_2.render("75", True, (255, 255, 255)), (675, 200))
+    pygame.draw.line(screen, (205, 205, 205), (150, 150), (670, 150), 1)
+    screen.blit(font_1_2.render("100", True, (255, 255, 255)), (675, 140))
+
+    # Main axes
+    pygame.draw.line(screen, (245, 245, 245), (150, 390), (660, 390), 3)
+    pygame.draw.line(screen, (245, 245, 245), (660, 150), (660, 390), 3)
+
+    #Time interval
+    screen.blit(font_1_2.render(f"{graph_duration} Seconds", True, (255, 255, 255)), (160, 390))
+
+    # Draw graphs
+    draw_trailing_graph(screen, lean_history, (0, 100, 255))  # blue
+    draw_trailing_graph(screen, brake_history, (200, 0, 0))  # red
+    draw_trailing_graph(screen, throttle_history, (0, 200, 0))  # green
+
+    #max brake
+    pygame.draw.rect(screen, (0, 0, 0), (160, 420, 300, 59))
+    pygame.draw.rect(screen, (255, 255, 255), (160, 420, 300, 59), 3)
+    screen.blit(font_1_3.render("Max", True, (255, 255, 255)), (172, 422))
+    screen.blit(font_1_3.render("Brake", True, (255, 255, 255)), (168, 446))
+    screen.blit(font_1_5.render(f"{maxbrake} psi", True, (200, 0, 0)), (265, 419))
+
+# ============================================================
+#               TRAILING GRAPH LINES
+# ============================================================
+
+def draw_trailing_graph(screen, history, color):
+    now =time.time()
+
+    x_min = 150
+    x_max = 660
+    width = x_max - x_min
+
+    points = []
+
+    for t, v in history:
+        dt = now - t
+        x = x_max - (dt / graph_duration) * width
+        if x >= x_min:
+            points.append((x, percent_to_y(v)))
+
+    # Draw the line
+    if len(points) > 1:
+        pygame.draw.lines(screen, color, False, points, 4)
+
+    # Draw current value dot (right side)
+    if points:
+        pygame.draw.circle(screen, color, (int(points[-1][0]), int(points[-1][1])), 5)
+
+# ============================================================
+#               TRAIL SAMPLE HELPER
+# ============================================================
+
+def add_sample(history, value):
+    now = time.time()
+    history.append((now, value))
+
+    cutoff = now - graph_duration
+    while history and history[0][0] < cutoff:
+        history.pop(0)
+
+# ============================================================
+#               TRAIL Y MAPPING
+# ============================================================
+
+def percent_to_y(p):
+    p = max(0, min(100, p))   # clamp 0–100
+    # 100% = 150, 0% = 390  (range: 240px)
+    return 390 - (p * (240 / 100))
 
 # ============================================================
 #               BASE LAYOUT FUNCTION
