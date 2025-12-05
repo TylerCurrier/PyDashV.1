@@ -88,6 +88,7 @@ void loop() {
 
   //Make new program at this point, but integrate earlier code. Angle is outputting correctly, but also need to make sure we are also putting out acceleration data.
   //As well as adding in transducer code, set up now as a rotary potentiometer 0-1900 psi
+  //man this aint even the code like wtf, update this shit
 }
 
 

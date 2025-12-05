@@ -45,6 +45,9 @@ CAN_ID_COOLANT = 0x103
 CAN_ID_IAT = 0x104
 CAN_ID_TPS = 0x105
 
+
+#i2c = busio.I2C(board.SCL, board.SDA)
+#rtc = adafruit_pcf8523.PCF8523(i2c)
 # ============================================================
 #               RTC SETUP
 # ============================================================
@@ -108,7 +111,7 @@ throttle_history = []
 # ============================================================
 
 def init_can():
-    if INPUT_MODE == "FAKE":
+    if INPUT_MODE == "FAKE": #Checks to see if CAN should be enabled or not
         print("[CAN] FAKE MODE – CAN Disabled")
         return None
     try:
@@ -121,7 +124,7 @@ def init_can():
 
 
 def process_can_frame(msg):
-    global rpm, speed, gear, coolant, iat, tps
+    global rpm, speed, gear, coolant, iat, tps #Process can data coming over, this stuff should work if CAN IDs are set correctly
     if msg.arbitration_id == CAN_ID_RPM:
         rpm = (msg.data[0] << 8) | msg.data[1]
     elif msg.arbitration_id == CAN_ID_SPEED:
@@ -266,6 +269,72 @@ def show_splash():
         time.sleep(2)
     except:
         print("[SPLASH] Missing image.")
+"""
+def splash_animation(screen, speed=20, steps=4):
+    pygame.font.init()
+
+    base_font_size = 20  # final size of characters
+    font_color = (255, 255, 255)
+
+    ascii_art = [
+        "$$$$$$$\\            $$$$$$$\\   $$$$$$\\   $$$$$$\\  $$\\   $$\\       $$\\    $$\\    $$\\",
+        "$$  __$$\\           $$  __$$\\ $$  __$$\\ $$  __$$\\ $$ |  $$ |      $$ |   $$ | $$$$ |",
+        "$$ |  $$ |$$\\   $$\\ $$ |  $$ |$$ /  $$ |$$ /  \\__|$$ |  $$ |      $$ |   $$ | \\_$$ |",
+        "$$$$$$$  |$$ |  $$ |$$ |  $$ |$$$$$$$$ |\\$$$$$$\\  $$$$$$$$ |      \\$$\\  $$  |   $$ |",
+        "$$  ____/ $$ |  $$ |$$ |  $$ |$$  __$$ | \\____$$\\ $$  __$$ |       \\$$\\$$  /    $$ |",
+        "$$ |      $$ |  $$ |$$ |  $$ |$$ |  $$ |$$\\   $$ |$$ |  $$ |        \\$$$  /     $$ |",
+        "$$ |      \\$$$$$$$ |$$$$$$$  |$$ |  $$ |\\$$$$$$  |$$ |  $$ |         \\$  /$$\\ $$$$$$\\",
+        "\\__|       \\____$$ |\\_______/ \\__|  \\__| \\______/ \\__|  \\__|          \\_/ \\__|\\______|",
+        "          $$\\   $$ |",
+        "          \\$$$$$$  |",
+        "           \\______/"
+    ]
+
+    rows = len(ascii_art)
+    cols = max(len(row) for row in ascii_art)
+
+    total_chars = rows * cols
+    char_index = 0
+
+    while char_index < total_chars:
+        for i in range(char_index):
+            row = i // cols
+            col = i % cols
+            ch = ascii_art[row][col] if col < len(ascii_art[row]) else " "
+            font = pygame.font.SysFont("Consolas", base_font_size, bold=True)
+            surface = font.render(ch, True, font_color)
+            screen.blit(surface, (col * base_font_size * 0.6, row * base_font_size))
+
+        row = char_index // cols
+        col = char_index % cols
+        if col < len(ascii_art[row]):
+            ch = ascii_art[row][col]
+            for step in range(1, steps + 1):
+                screen.fill((0, 0, 0))
+
+                # redraw completed characters
+                for i in range(char_index):
+                    r = i // cols
+                    c = i % cols
+                    ch2 = ascii_art[r][c] if c < len(ascii_art[r]) else " "
+                    f2 = pygame.font.SysFont("Consolas", base_font_size, bold=True)
+                    s2 = f2.render(ch2, True, font_color)
+                    screen.blit(s2, (c * base_font_size * 0.6, r * base_font_size))
+
+                # draw animated character at growing size
+                size = int(base_font_size * (step / steps))
+                font = pygame.font.SysFont("Consolas", size, bold=True)
+                surface = font.render(ch, True, font_color)
+                screen.blit(surface, (col * base_font_size * 0.6, row * base_font_size))
+
+                pygame.display.flip()
+                pygame.time.delay(speed)
+
+        char_index += 1
+
+    pygame.display.flip()
+    pygame.time.delay(500)
+"""
 
 
 # ============================================================
@@ -884,10 +953,19 @@ def draw_base_layout():
         #Time 24h
     #need to get the can hat to see the rtc and which one it is.
     #standin time
+    draw_RTCtime()
     screen.blit(font_1_5.render(f"00:00", True, (255, 255, 255)), (685, 422))
         #Connections
+    draw_connections()
 
+# ============================================================
+#               CONNECTIONS FUNCTION / And / CLOCK RTC FUNCTION
+# ============================================================
+def draw_connections():
+    screen.blit(font_1_5.render(f"00:00", True, (255, 255, 255)), (685, 422))
 
+def draw_RTCtime():
+    screen.blit(font_1_5.render(f"1 , 2 , 3", True, (255, 255, 255)), (685, 422))
 
 
 # ============================================================
@@ -906,10 +984,10 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RIGHT:
+            elif event.type == pygame.KEYDOWN: #if key pressed (which key)
+                if event.key == pygame.K_RIGHT: #right arrow
                     current_screen = 1 if current_screen == 5 else current_screen + 1
-                elif event.key == pygame.K_LEFT:
+                elif event.key == pygame.K_LEFT: #left arrow
                     current_screen = 5 if current_screen == 1 else current_screen - 1
 
         # SERIAL ONLY — no filtering applied
