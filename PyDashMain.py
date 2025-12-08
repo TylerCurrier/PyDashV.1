@@ -74,6 +74,12 @@ print("Formatted:", current_time.tm_year, current_time.tm_mon, current_time.tm_m
 #               GLOBAL DATA VARIABLES AND HANDLING
 # ============================================================
 
+#startup var strings
+canString = ""
+serArdString = ""
+serBtnString = ""
+
+#Can vars
 rpm = 0
 speed = 0
 gear = 0
@@ -128,15 +134,20 @@ throttle_history = []
 # ============================================================
 
 def init_can():
+    global canString
     if INPUT_MODE == "FAKE": #Checks to see if CAN should be enabled or not
-        print("[CAN] FAKE MODE – CAN Disabled")
+        canString = "[CAN] FAKE MODE – CAN Disabled"
+        print(canString)
         return None
     try:
         bus = can.interface.Bus(channel=CAN_CHANNEL, bustype='socketcan')
-        print("[CAN] Connected.")
+        canString = "[CAN] Connected."
+        print(canString)
         return bus
     except Exception as e:
-        print("[CAN ERROR]", e)
+        canString = "[CAN ERROR]"
+        print(canString, e)
+
         return None
 
 
@@ -161,21 +172,26 @@ def process_can_frame(msg):
 # ============================================================
 
 def init_serial():
+    global serArdString
     try:
         ser = serial.Serial(SERIAL_PORT1, SERIAL_BAUD1, timeout=0.1)
-        print("[SERIAL] Connected to Arduino.")
+        serArdString = "[SERIAL] Connected to Arduino."
+        print(serArdString)
         return ser
     except:
-        print("[SERIAL ERROR] Could not connect.")
+        serArdString = "[SERIAL ERROR] Could not connect."
+        print(serArdString)
         return None
 
 def init_button_serial():
-    global btn_serial
+    global btn_serial, serBtnString
     try:
         btn_serial = serial.Serial(SERIAL_PORT2, SERIAL_BAUD2, timeout=0.1)
-        print("[SERIAL-BTN] Connected.")
+        serBtnString = "[SERIAL-BTN] Connected."
+        print(serBtnString)
     except serial.SerialException as e:
-        print(f"[SERIAL-BTN ERROR] Could not connect: {e}")
+        serBtnString = "[SERIAL-BTN ERROR] Could not connect: {e}"
+        print(serBtnString)
         btn_serial = None
 
 
@@ -338,6 +354,7 @@ def show_splash():
         pygame.display.update()
         splash_animation(screen, char_delay=2)
         time.sleep(2)
+
     except:
         print("[SPLASH] Missing image.")
 
@@ -346,6 +363,7 @@ import pygame
 
 
 def splash_animation(screen, char_delay=4, x_offset=10, y_offset=50):
+    global canString, serArdString, serBtnString
     """
     Draws an ASCII logo scrolling left-to-right, top-to-bottom with optional offsets.
 
@@ -392,7 +410,20 @@ def splash_animation(screen, char_delay=4, x_offset=10, y_offset=50):
                     pygame.quit()
                     exit()
 
-    pygame.time.delay(2000)
+    # setup data
+    # Can
+    screen.blit(font_1_3.render(f"{canString}", True, (255, 255, 255)), (50, 300))
+    pygame.display.update()
+    pygame.time.delay(300)
+    # Serial
+    screen.blit(font_1_3.render(f"{serArdString}", True, (255, 255, 255)), (50, 350))
+    pygame.display.update()
+    pygame.time.delay(300)
+    # Serial-BTN
+    screen.blit(font_1_3.render(f"{serBtnString}", True, (255, 255, 255)), (50, 400))
+    pygame.display.update()
+    pygame.time.delay(3000)
+
 
 # ============================================================
 #               SCREEN FUNCTIONS
@@ -1083,10 +1114,10 @@ def draw_RTCtime():
 # ============================================================
 
 def main():
-    show_splash()
     bus = init_can()
     ser_imu = init_serial()
     init_button_serial()  # initialize button serial
+    show_splash()
     current_screen = 1
     running = True
 
