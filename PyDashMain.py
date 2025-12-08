@@ -1,6 +1,6 @@
 # PyDashMain V2.1
 # Author: Tyler Currier
-# Latest Revision 11/29/2025
+# Latest Revision 12/8/2025
 
 # Imported libraries
 import time
