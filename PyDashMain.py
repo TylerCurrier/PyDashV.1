@@ -28,10 +28,13 @@ IMAGE_DIR = "images/"
 SPLASH_IMAGE = IMAGE_DIR + "splash.jpg"
 BG_IMAGE = IMAGE_DIR + "mainback.jpg"
 
-#Arduino Channel
-SERIAL_PORT = "COM6"
-SERIAL_BAUD = 115200
+#Arduino 1
+SERIAL_PORT1 = "COM6" #"dev/ttyUSB0"
+SERIAL_BAUD1 = 115200
 
+#Arduino BTNs
+SERIAL_PORT2 = "COM3" #"dev/ttyUSB1"
+SERIAL_BAUD2 = 115200
 #CAN Channel
 CAN_CHANNEL = "can0"
 CAN_BITRATE = 500000
@@ -90,11 +93,25 @@ imu_data = {
 #z vert
 #Remember the orientation -- and remember to correct the lateral values for lean on the arduino
 
+
+
 #Max values have to be definied globally to prevent overwriting within functions
 maxg = 0 #Max GForces
 maxl = 0 #Max left lean
 maxr = 0 #max right lean
 maxbrake = 0 #Maximum brake pressure
+
+#BTN variables
+btn1_state = 1  #Black btn, 0 = pressed, 1 = released
+btn2_state = 1  #Red btn
+btn1_short_press = False
+btn1_long_press = False
+btn2_short_press = False
+btn2_long_press = False
+_btn1_press_start = None
+_btn2_press_start = None
+btn_serial = None  # Serial 2 object
+
 
 #saving g history for g_dot usage
 g_history = [] #(timestamp, x, y)
@@ -145,12 +162,21 @@ def process_can_frame(msg):
 
 def init_serial():
     try:
-        ser = serial.Serial(SERIAL_PORT, SERIAL_BAUD, timeout=0.1)
+        ser = serial.Serial(SERIAL_PORT1, SERIAL_BAUD1, timeout=0.1)
         print("[SERIAL] Connected to Arduino.")
         return ser
     except:
         print("[SERIAL ERROR] Could not connect.")
         return None
+
+def init_button_serial():
+    global btn_serial
+    try:
+        btn_serial = serial.Serial(SERIAL_PORT2, SERIAL_BAUD2, timeout=0.1)
+        print("[SERIAL-BTN] Connected.")
+    except serial.SerialException as e:
+        print(f"[SERIAL-BTN ERROR] Could not connect: {e}")
+        btn_serial = None
 
 
 def read_serial(ser):
@@ -210,6 +236,50 @@ def read_serial(ser):
         elif key == "MZ":
             imu_data["mz"] = value
 
+def read_buttons():
+    """
+    Reads button states from Serial 2 and updates globals:
+    btn1_state, btn2_state (0/1)
+    btn1_short_press, btn1_long_press
+    btn2_short_press, btn2_long_press
+    """
+    global btn1_state, btn2_state
+    global btn1_short_press, btn1_long_press, btn2_short_press, btn2_long_press
+    global _btn1_press_start, _btn2_press_start
+
+    if btn_serial is None or btn_serial.in_waiting == 0:
+        return
+
+    try:
+        line = btn_serial.readline().decode('utf-8').strip()
+        line = line.replace('(', '').replace(')', '')
+        values = line.split(',')
+        btn1_new = int(values[0])
+        btn2_new = int(values[1])
+    except (ValueError, IndexError):
+        return
+
+    # --- Button 1 logic --- black btn
+    if btn1_new == 0 and btn1_state == 1:  # just pressed
+        _btn1_press_start = time.time()
+    elif btn1_new == 1 and btn1_state == 0:  # just released
+        duration = time.time() - (_btn1_press_start or time.time())
+        btn1_short_press = 0.1 <= duration < 3
+        btn1_long_press = duration >= 3
+        _btn1_press_start = None
+
+    # --- Button 2 logic --- red btn
+    if btn2_new == 0 and btn2_state == 1:  # just pressed
+        _btn2_press_start = time.time()
+    elif btn2_new == 1 and btn2_state == 0:  # just released
+        duration = time.time() - (_btn2_press_start or time.time())
+        btn2_short_press = 0.1 <= duration < 3
+        btn2_long_press = duration >= 3
+        _btn2_press_start = None
+
+    # Update states
+    btn1_state = btn1_new
+    btn2_state = btn2_new
 
 # ============================================================
 #               PYGAME INITIALIZATION
@@ -962,7 +1032,8 @@ def draw_RTCtime():
 def main():
     show_splash()
     bus = init_can()
-    ser = init_serial()
+    ser_imu = init_serial()
+    init_button_serial()  # initialize button serial
     current_screen = 1
     running = True
 
@@ -971,29 +1042,39 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == pygame.KEYDOWN: #if key pressed (which key)
-                if event.key == pygame.K_RIGHT: #right arrow
+            elif event.type == pygame.KEYDOWN:  # if key pressed
+                if event.key == pygame.K_RIGHT:  # right arrow
                     current_screen = 1 if current_screen == 5 else current_screen + 1
-                elif event.key == pygame.K_LEFT: #left arrow
+                elif event.key == pygame.K_LEFT:  # left arrow
                     current_screen = 5 if current_screen == 1 else current_screen - 1
 
         # SERIAL ONLY — no filtering applied
-        read_serial(ser)
+        read_serial(ser_imu)
+
+        # --- BUTTON INPUT HANDLING --- black right red left
+        read_buttons()  # update global button states
+        global btn1_short_press, btn2_short_press  # access globals
+        if btn2_short_press:
+            current_screen = 5 if current_screen == 1 else current_screen - 1  # left
+            btn2_short_press = False  # reset immediately
+        if btn1_short_press:
+            current_screen = 1 if current_screen == 5 else current_screen + 1  # right
+            btn1_short_press = False  # reset immediately
 
         if INPUT_MODE == "REAL" and bus:
             msg = bus.recv(timeout=0.01)
             if msg:
                 process_can_frame(msg)
 
-        if current_screen == 1: #Main
+        if current_screen == 1:  # Main
             screen_1()
-        elif current_screen == 2: #Laptimer
+        elif current_screen == 2:  # Laptimer
             screen_2()
-        elif current_screen == 3: #Lean
+        elif current_screen == 3:  # Lean
             screen_3()
-        elif current_screen == 4: #Gforce
+        elif current_screen == 4:  # Gforce
             screen_4()
-        elif current_screen == 5: #Trail
+        elif current_screen == 5:  # Trail
             screen_5()
 
         pygame.display.update()
