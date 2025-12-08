@@ -1,5 +1,10 @@
-//Language = Arduino
-//This will be the main code for the ard nano running the IMU and brake transducer
+//PyDashV.1 -- IMU_TRA
+//Tyler Currier - December 7, 2025
+
+
+//Destription -----
+//This is the main code to run on the ARD1 sensor. We are taking data from an MPU6050 IMU and a 1600psi transducer
+//data is sent over serial to the Raspberry Pi
 
 
 #include <Wire.h>

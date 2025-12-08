@@ -1,6 +1,7 @@
 //PyDashV.1 -- Dash_btns
 //Tyler Currier - December 7, 2025
 
+//Destription -----
 //This program takes the input from two momentary buttons mounted to the dash and sends their binary data over
 //serial to the main program.
 

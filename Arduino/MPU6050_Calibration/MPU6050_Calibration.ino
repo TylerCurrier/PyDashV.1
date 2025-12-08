@@ -1,4 +1,10 @@
-//this is the program for configuring the IMU
+//PyDashV.1 -- MPU6050_Calibration
+//Tyler Currier - December 7, 2025
+
+
+//Destription -----
+//This program collections configuration constants for use on the MOU6050, the IMU used for PyDash V.1\
+//This program is run once the device is mounted and the bike is perfectly level. The constants can then be carried over to IMU_TRA.INO
 
 #include <Wire.h>
 #include <MPU6050.h>
@@ -40,5 +46,5 @@ void setup() {
 
 
 void loop() {
-    // Nothing needed here
+    
 }

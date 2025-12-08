@@ -1,17 +1,14 @@
-// -----------------------------------------------------------------------------
-//   Fake Motorcycle Sensor Data Generator for Arduino Nano
-//   Sends simulated CAN/serial dash data for UI development.
-//   Tyler Currier — 2025
-// -----------------------------------------------------------------------------
+//PyDashV.1 -- Fake_DASH_input
+//Tyler Currier - December 7, 2025
 
-// --------------------------- CONFIGURATION BLOCK -----------------------------
 
+//Destription -----
+// This program sends generated data over serial to the Raspberry Pi for GUI and general troubleshooting purposes. Both Ard and CAN signals are generated
+
+
+// Configurations
 unsigned long updateInterval = 50;   // ms between updates (20 Hz output)
 float sweepSpeed = 0.02;            // speed of oscillation for most sensors
-
-// -----------------------------------------------------------------------------
-//                               INTERNAL STATE
-// -----------------------------------------------------------------------------
 
 unsigned long lastUpdate = 0;
 float t = 0.0;                      // global time value for oscillation
@@ -21,18 +18,14 @@ int gear = 0;                       // 0 = Neutral
 unsigned long lastGearChange = 0;
 unsigned long gearInterval = 1500;  // ms between automatic gear changes
 
-// -----------------------------------------------------------------------------
-//                                    SETUP
-// -----------------------------------------------------------------------------
+
 void setup() {
   delay(5000);                      // startup delay for your UI system
   Serial.begin(115200);
   Serial.println("Starting fake motorcycle data generator...");
 }
 
-// -----------------------------------------------------------------------------
-//                                    LOOP
-// -----------------------------------------------------------------------------
+
 void loop() {
   unsigned long now = millis();
 
@@ -41,7 +34,7 @@ void loop() {
     lastUpdate = now;
     t += sweepSpeed;
 
-    // ---------------------- Generate Fake Sensor Data -----------------------
+    // Generate Fake Sensor Data
 
     // RPM: oscillates between 2000 and 16000
     int rpm = map(sin(t) * 1000, -1000, 1000, 2000, 16000);
@@ -78,7 +71,7 @@ void loop() {
     // Lateral accel: –1g → +1g
     float accelLat = cos(t * 2.2);
 
-    // --------------------------- SERIAL OUTPUT ------------------------------
+    // Serial Output
 
     Serial.print("RPM:");           Serial.print(rpm);
     Serial.print(",SPD:");          Serial.print(speed);
