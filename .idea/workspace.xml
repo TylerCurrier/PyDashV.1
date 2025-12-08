@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1614f22e-7a5e-4e9b-aa48-d929013fc378" name="Changes" comment="Comments">
-      <change beforePath="$PROJECT_DIR$/Arduino/Nano_IMU_POT" beforeDir="false" afterPath="$PROJECT_DIR$/Arduino/Nano_IMU_POT" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PyDashMain.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyDashMain.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -46,7 +45,8 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.PyDashMain.executor": "Run",
+    "Python.PyDashMaiN.executor": "Run",
+    "Python.PyDashMain.executor": "Coverage",
     "Python.SerialTest.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
@@ -68,7 +68,31 @@
       <recent name="D:\PyDashV.1\Images" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.PyDashMaiN">
+    <configuration name="PyDashMaiN" type="PythonConfigurationType" factoryName="Python">
+      <module name="PyDashV.1" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.13 (PyDashV.1)" />
+      <option name="WORKING_DIRECTORY" value="D:\PyDashV.1" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PyDashMain.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="PyDashMain" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="PyDashV.1" />
       <option name="ENV_FILES" value="" />
@@ -92,6 +116,10 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python.PyDashMain" />
+      <item itemvalue="Python.PyDashMaiN" />
+    </list>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -109,7 +137,7 @@
       <option name="presentableId" value="Default" />
       <updated>1763670105247</updated>
       <workItem from="1763670106411" duration="60038000" />
-      <workItem from="1764948673465" duration="828000" />
+      <workItem from="1764948673465" duration="2732000" />
     </task>
     <task id="LOCAL-00001" summary="commit start">
       <option name="closed" value="true" />
@@ -383,7 +411,23 @@
       <option name="project" value="LOCAL" />
       <updated>1764533730351</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="Comments">
+      <option name="closed" value="true" />
+      <created>1764949517134</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1764949517134</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Comments">
+      <option name="closed" value="true" />
+      <created>1764949527539</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1764949527539</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -409,6 +453,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PyDashV_1$SerialTest.coverage" NAME="SerialTest Coverage Results" MODIFIED="1763767535513" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PyDashV_1$PyDashMain.coverage" NAME="PyDashMain Coverage Results" MODIFIED="1764532986947" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PyDashV_1$PyDashMain.coverage" NAME="PyDashMain Coverage Results" MODIFIED="1764949532653" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PyDashV_1$PyDashMaiN.coverage" NAME="PyDashMaiN Coverage Results" MODIFIED="1764949928335" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="D:\PyDashV.1" />
   </component>
 </project>

@@ -9,7 +9,7 @@ import serial
 import can
 import math
 #RTC Libs
-import board
+#import board
 #import busio
 #import adafruit_pcf8523
 #from datetime import datetime
