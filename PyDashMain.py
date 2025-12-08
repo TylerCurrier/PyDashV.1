@@ -262,20 +262,34 @@ bg_main = load_bg(BG_IMAGE)
 
 def show_splash():
     try:
-        img = pygame.image.load(SPLASH_IMAGE)
+        img = pygame.image.load(BG_IMAGE)
         img = pygame.transform.scale(img, (800, 480))
         screen.blit(img, (0, 0))
         pygame.display.update()
+        splash_animation(screen, char_delay=2)
         time.sleep(2)
     except:
         print("[SPLASH] Missing image.")
-"""
-def splash_animation(screen, speed=20, steps=4):
+
+
+import pygame
+
+
+def splash_animation(screen, char_delay=4, x_offset=10, y_offset=50):
+    """
+    Draws an ASCII logo scrolling left-to-right, top-to-bottom with optional offsets.
+
+    :param screen: Pygame screen object
+    :param char_delay: Delay in milliseconds between characters
+    :param x_offset: Horizontal pixel offset for the logo
+    :param y_offset: Vertical pixel offset for the logo
+    """
     pygame.font.init()
-
-    base_font_size = 20  # final size of characters
     font_color = (255, 255, 255)
+    font_size =15
+    font = pygame.font.SysFont("Consolas", font_size, bold=True)
 
+    # ASCII logo embedded
     ascii_art = [
         "$$$$$$$\\            $$$$$$$\\   $$$$$$\\   $$$$$$\\  $$\\   $$\\       $$\\    $$\\    $$\\",
         "$$  __$$\\           $$  __$$\\ $$  __$$\\ $$  __$$\\ $$ |  $$ |      $$ |   $$ | $$$$ |",
@@ -291,51 +305,24 @@ def splash_animation(screen, speed=20, steps=4):
     ]
 
     rows = len(ascii_art)
-    cols = max(len(row) for row in ascii_art)
 
-    total_chars = rows * cols
-    char_index = 0
-
-    while char_index < total_chars:
-        for i in range(char_index):
-            row = i // cols
-            col = i % cols
-            ch = ascii_art[row][col] if col < len(ascii_art[row]) else " "
-            font = pygame.font.SysFont("Consolas", base_font_size, bold=True)
+    # Draw characters left-to-right, top-to-bottom
+    for r in range(rows):
+        for c in range(len(ascii_art[r])):
+            ch = ascii_art[r][c]
             surface = font.render(ch, True, font_color)
-            screen.blit(surface, (col * base_font_size * 0.6, row * base_font_size))
+            # apply offsets here
+            screen.blit(surface, (x_offset + c * font_size * 0.6, y_offset + r * font_size))
+            pygame.display.update()
+            pygame.time.delay(char_delay)
 
-        row = char_index // cols
-        col = char_index % cols
-        if col < len(ascii_art[row]):
-            ch = ascii_art[row][col]
-            for step in range(1, steps + 1):
-                screen.fill((0, 0, 0))
+            # Handle quit events
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
 
-                # redraw completed characters
-                for i in range(char_index):
-                    r = i // cols
-                    c = i % cols
-                    ch2 = ascii_art[r][c] if c < len(ascii_art[r]) else " "
-                    f2 = pygame.font.SysFont("Consolas", base_font_size, bold=True)
-                    s2 = f2.render(ch2, True, font_color)
-                    screen.blit(s2, (c * base_font_size * 0.6, r * base_font_size))
-
-                # draw animated character at growing size
-                size = int(base_font_size * (step / steps))
-                font = pygame.font.SysFont("Consolas", size, bold=True)
-                surface = font.render(ch, True, font_color)
-                screen.blit(surface, (col * base_font_size * 0.6, row * base_font_size))
-
-                pygame.display.flip()
-                pygame.time.delay(speed)
-
-        char_index += 1
-
-    pygame.display.flip()
-    pygame.time.delay(500)
-"""
-
+    pygame.time.delay(2000)
 
 # ============================================================
 #               SCREEN FUNCTIONS
