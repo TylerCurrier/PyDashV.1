@@ -812,12 +812,65 @@ def draw_lean():
     pygame.draw.line(screen, colour, (cx,cy + radius), (cx,cy -radius), 2) #Vertical Line
     pygame.draw.line(screen, colour, (cx + 175,cy), (cx - 175,cy), 2)      #Horizontal Line
 
-    #lean needle
+    #Drawing lean pie slices
+    ncolor = (100, 255, 100)  # slice color
+    steps = 1  # degrees per step
+
+        #top slice
+    points = [(cx, cy)]  # center
+    # Determine direction: positive = left, negative = right
+    if lean >= 0:  # left lean
+        start = 0
+        end = int(lean)
+        step_sign = 1
+    else:  # right lean
+        start = 0
+        end = int(lean)
+        step_sign = -1
+    # Generate points along the needle path across the circle
+    for a in range(start, end + step_sign, step_sign):
+        rad = math.radians(90 + a)  # mirror to match needle orientation
+        x = cx + radius * math.cos(rad)
+        y = cy - radius * math.sin(rad)
+        points.append((x, y))
+    # Ensure at least 3 points
+    if len(points) < 3:
+        points.append((cx, cy - radius))
+        points.append((cx, cy + radius))
+
+    # Draw top slice
+    pygame.draw.polygon(screen, ncolor, points)
+        #bottom slice
+    points = [(cx, cy)]  # center
+    # Determine direction: positive = left, negative = right
+    if lean >= 0:  # left lean
+        start = 0
+        end = int(lean)
+        step_sign = 1
+    else:  # right lean
+        start = 0
+        end = int(lean)
+        step_sign = -1
+    # Generate points along the needle path across the circle
+    for a in range(start, end + step_sign, step_sign):
+        rad = math.radians(90 + a)  # mirror to match needle orientation
+        x = cx - radius * math.cos(rad)
+        y = cy + radius * math.sin(rad)
+        points.append((x, y))
+    # Ensure at least 3 points
+    if len(points) < 3:
+        points.append((cx, cy - radius))
+        points.append((cx, cy + radius))
+    # Draw bottom slice
+    pygame.draw.polygon(screen, ncolor, points)
+
+
+    #leading lean needle
     #lean = -- this is my variable, there are many like it but this one is mine
     leanphi = 90 - abs(lean)                #lean inverted
     leanphir = math.radians(leanphi)        #lean inv converted to radians
     nwidth = 8                              #needle width
-    ncolor = (100,255,100)                  #needle color
+    ncolor = (225,120,120)                  #needle color
     lx = radius*math.cos(leanphir)          #x coord of single quad value
     ly = radius*math.sin(leanphir)          #y coord of single quad value
 
