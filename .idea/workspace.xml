@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1614f22e-7a5e-4e9b-aa48-d929013fc378" name="Changes" comment="ARD files corrections">
-      <change beforePath="$PROJECT_DIR$/Arduino/Dash_btns/Dash_btns.ino" beforeDir="false" afterPath="$PROJECT_DIR$/Arduino/Dash_btns/Dash_btns.ino" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Arduino/Fake_DASH_input/Fake_DASH_input.ino" beforeDir="false" afterPath="$PROJECT_DIR$/Arduino/Fake_DASH_input/Fake_DASH_input.ino" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Arduino/IMU_TRA/IMU_TRA.ino" beforeDir="false" afterPath="$PROJECT_DIR$/Arduino/IMU_TRA/IMU_TRA.ino" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Arduino/MPU6050_Calibration/MPU6050_Calibration.ino" beforeDir="false" afterPath="$PROJECT_DIR$/Arduino/MPU6050_Calibration/MPU6050_Calibration.ino" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,27 +42,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.PyDashMaiN.executor": "Run",
-    "Python.PyDashMain.executor": "Coverage",
-    "Python.SerialTest.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "D:/PyDashV.1",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.PyDashMaiN.executor&quot;: &quot;Run&quot;,
+    &quot;Python.PyDashMain.executor&quot;: &quot;Coverage&quot;,
+    &quot;Python.SerialTest.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/PyDashV.1&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\PyDashV.1\Images" />
@@ -81,7 +78,6 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.13 (PyDashV.1)" />
       <option name="WORKING_DIRECTORY" value="D:\PyDashV.1" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -141,6 +137,7 @@
       <updated>1763670105247</updated>
       <workItem from="1763670106411" duration="60038000" />
       <workItem from="1764948673465" duration="6694000" />
+      <workItem from="1765202699980" duration="118000" />
     </task>
     <task id="LOCAL-00001" summary="commit start">
       <option name="closed" value="true" />
