@@ -18,7 +18,7 @@ import math
 #              INPUT MODE ("REAL" or "FAKE")
 # ============================================================
 #Real input mode is normal operations, fake is for generated data from single arduino for GUI setup
-INPUT_MODE = "FAKE"  # <-- CHANGE THIS ONE VARIABLE
+INPUT_MODE = "REAL"  # <-- CHANGE THIS ONE VARIABLE
 
 # ============================================================
 #                  USER SETUP

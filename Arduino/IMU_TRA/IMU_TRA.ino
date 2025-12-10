@@ -70,8 +70,17 @@ void loop() {
 
   // --- Your offset (apply LAST) ---
   corrAngle = angle + 7.75;
+  //Serial.println("lean:" + corrAngle + "," + "AX:" + ax + "AY:" + ay);
+  //Serial.println(corrAngle);
+  Serial.print("LEAN:"); 
+  Serial.print(corrAngle);
+  Serial.print(",AX");
+  Serial.print(ax);
+  Serial.print(",AY");
+  Serial.print(ay);
+  Serial.print(",BRK");
+  Serial.println("0 "); //change off ln for future use
 
-  Serial.println(corrAngle);
   //we do have a drift right now (very drunk while doing this) - at around 20 to 25 degrees, 5 degrees of drift is introducded...
   //not sure why, maybe toy with sensor mounting or offsets, shipping it for now
   //AND dont forget to add ax, ay, and brake press code
