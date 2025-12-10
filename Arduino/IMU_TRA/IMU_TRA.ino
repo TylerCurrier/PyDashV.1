@@ -1,47 +1,33 @@
-//PyDashV.1 -- IMU_TRA
-//Tyler Currier - December 7, 2025
-
-
-//Destription -----
-//This is the main code to run on the ARD1 sensor. We are taking data from an MPU6050 IMU and a 1600psi transducer
-//data is sent over serial to the Raspberry Pi
-
-
 #include <Wire.h>
 
-
-//Offsets from the calibration program:
-int16_t ax_offset = -1628;
-int16_t ay_offset = 273;
-int16_t az_offset = 3274;
-int16_t gx_offset = -197;
-int16_t gy_offset = 32;
-int16_t gz_offset = 17;
-
+// Offsets (replace these with new calibration) (last calib 12/10/25 - off bike)
+// offsets deal with acceleration and gyrometric forces from earch rotation and orbit. 
+int16_t ax_offset = 2040;
+int16_t ay_offset = 371;
+int16_t az_offset = 1462;
+int16_t gx_offset = -111;
+int16_t gy_offset = 56;
+int16_t gz_offset = -59;
 
 float angle = 0.0;
+float corrAngle = 0.0;
 unsigned long lastTime;
-
 
 void setup() {
   Serial.begin(115200);
   Wire.begin();
 
-
-  // Wake up MPU6050
+  // Wake IMU
   Wire.beginTransmission(0x68);
   Wire.write(0x6B);
-  Wire.write(0);
+  Wire.write(0x00);
   Wire.endTransmission(true);
-
 
   lastTime = micros();
 }
 
-
 void loop() {
   int16_t ax, ay, az, gx, gy, gz;
-
 
   // --- Read accelerometer ---
   Wire.beginTransmission(0x68);
@@ -52,7 +38,6 @@ void loop() {
   ay = Wire.read() << 8 | Wire.read();
   az = Wire.read() << 8 | Wire.read();
 
-
   // --- Read gyro ---
   Wire.beginTransmission(0x68);
   Wire.write(0x43);
@@ -62,8 +47,7 @@ void loop() {
   gy = Wire.read() << 8 | Wire.read();
   gz = Wire.read() << 8 | Wire.read();
 
-
-  // --- Apply offsets ---
+  // Apply offsets
   ax -= ax_offset;
   ay -= ay_offset;
   az -= az_offset;
@@ -71,29 +55,23 @@ void loop() {
   gy -= gy_offset;
   gz -= gz_offset;
 
-
-  // --- Calculate accelerometer lean angle (in degrees) ---
-  float accelAngle = atan2(ay, az) * 57.2958;
-
+  // --- Correct axis for motorcycle roll ---
+  float accelAngle = atan2(ax, az) * 57.2958;
 
   // --- Gyro integration ---
   unsigned long now = micros();
-  float dt = (now - lastTime) / 1000000.0;
+  float dt = (now - lastTime) * 1e-6;
   lastTime = now;
 
+  float gyroRate = gx / 131.0;
 
-  float gyroRate = gx / 131.0;   // deg/s for ±250°/s
+  // --- Complementary filter (improved weighting) ---
+  angle = 0.95 * (angle + gyroRate * dt) + 0.05 * accelAngle;
 
+  // --- Your offset (apply LAST) ---
+  corrAngle = angle + 7.75;
 
-  // --- Complementary filter ---
-  angle = 0.98 * (angle + gyroRate * dt) + 0.02 * accelAngle;
-
-
-  Serial.println(angle);
-
-  //Make new program at this point, but integrate earlier code. Angle is outputting correctly, but also need to make sure we are also putting out acceleration data.
-  //As well as adding in transducer code, set up now as a rotary potentiometer 0-1900 psi
-  //man this aint even the code like wtf, update this shit
+  Serial.println(corrAngle);
+  //we do have a drift right now (very drunk while doing this) - at around 20 to 25 degrees, 5 degrees of drift is introducded...
+  //not sure why, maybe toy with sensor mounting or offsets, shipping it for now
 }
-
-
