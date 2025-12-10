@@ -74,4 +74,5 @@ void loop() {
   Serial.println(corrAngle);
   //we do have a drift right now (very drunk while doing this) - at around 20 to 25 degrees, 5 degrees of drift is introducded...
   //not sure why, maybe toy with sensor mounting or offsets, shipping it for now
+  //AND dont forget to add ax, ay, and brake press code
 }
