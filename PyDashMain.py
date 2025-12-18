@@ -28,29 +28,13 @@ IMAGE_DIR = "images/"
 SPLASH_IMAGE = IMAGE_DIR + "splash.jpg"
 BG_IMAGE = IMAGE_DIR + "mainback.jpg"
 
-
-
 #Arduino 1
 SERIAL_PORT1 = "COM6" #"dev/ttyUSB0"
 SERIAL_BAUD1 = 115200
-#ser_imu = serial.Serial(
-#    port=SERIAL_PORT1,
-#    baudrate=SERIAL_BAUD1,
-#    timeout=0.01
-#)
 
 #Arduino BTNs
 SERIAL_PORT2 = "COM3" #"dev/ttyUSB1"
 SERIAL_BAUD2 = 115200
-#ser_btn = serial.Serial(
-#    port=SERIAL_PORT2,
-#    baudrate=SERIAL_BAUD2,
-#    timeout=0.01
-#)
-
-#ser_imu.reset_input_buffer()
-#ser_btn.reset_input_buffer()
-
 
 #CAN Channel
 CAN_CHANNEL = "can0"
@@ -105,13 +89,12 @@ iat = 0
 tps = 0
 
 # IMU / Arduino variables
-imu_data = {
-    "ax": 0, "ay": 0, "az": 0,
-    "gx": 0, "gy": 0, "gz": 0,
-    "mx": 0, "my": 0, "mz": 0,
+imu_data = { #these are the only variables im importing for now, more can be added later if i find a reason
+    "ax": 0, "ay": 0,
     "lean": 0, "pitch": 0,
     "brake": 0
 }
+
 #y long
 #x lat
 #z vert
@@ -127,7 +110,7 @@ maxbrake = 0 #Maximum brake pressure
 
 #BTN variables
 btn1_state = 1  #Black btn, 0 = pressed, 1 = released
-btn2_state = 1  #Red btn
+btn2_state = 1  #Red btn, same states
 btn1_short_press = False
 btn1_long_press = False
 btn2_short_press = False
@@ -194,7 +177,7 @@ def init_serial():
         ser = serial.Serial(
             SERIAL_PORT1,
             SERIAL_BAUD1,
-            timeout=0.01      # 🔑 MUCH smaller timeout
+            timeout=0.01      # smaller timeout = more processing, better data refresh
         )
         ser.reset_input_buffer()
         print("[SERIAL] IMU connected")
@@ -209,7 +192,7 @@ def init_button_serial():
         ser = serial.Serial(
             SERIAL_PORT2,
             SERIAL_BAUD2,
-            timeout=0.01      # 🔑 same fix here
+            timeout=0.01      #same timeout relation
         )
         ser.reset_input_buffer()
         print("[SERIAL-BTN] Connected")
@@ -229,7 +212,7 @@ def read_serial(ser):
 
     latest_line = None
 
-    # 🔹 Read all available lines and keep only the latest
+    #Read all available lines and keep only the latest
     while ser.in_waiting:
         try:
             latest_line = ser.readline().decode(errors="ignore").strip()
@@ -239,9 +222,9 @@ def read_serial(ser):
     if not latest_line:
         return
 
-    # 🔹 Only parse the four keys we care about
+    #Only parse the four keys we care about
     parts = latest_line.split(",")
-    for p in parts:
+    for p in parts:  #this loop checks for "keys" from incoming CSV, key must match for data to be collected
         if ":" not in p:
             continue
         key, value = p.split(":", 1)
