@@ -85,7 +85,6 @@ void loop() {
   Serial.print(",BRK:");
   Serial.println("0 "); //change off ln for future use
 
-  //we do have a drift right now (very drunk while doing this) - at around 20 to 25 degrees, 5 degrees of drift is introducded...
-  //not sure why, maybe toy with sensor mounting or offsets, shipping it for now
-  //AND dont forget to add ax, ay, and brake press code
+  //There was a 5 degree drift from 20 to 25 degrees on both sides, not sure where it went but whatever,
+  //Brake pressure code still needs to be added.
 }
