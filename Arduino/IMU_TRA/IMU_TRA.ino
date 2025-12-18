@@ -65,6 +65,10 @@ void loop() {
 
   float gyroRate = gx / 131.0;
 
+  //scaled ax and ay for 2g calibration
+  float ax_g = ax / 16384.0; //assuming 2g, this constant is the LSB/g sensativity
+  float ay_g = ay / 16348.0;
+
   // --- Complementary filter (improved weighting) ---
   angle = 0.95 * (angle + gyroRate * dt) + 0.05 * accelAngle;
 
@@ -75,9 +79,9 @@ void loop() {
   Serial.print("LEAN:"); 
   Serial.print(corrAngle);
   Serial.print(",AX:");
-  Serial.print(ax);
+  Serial.print(ax_g);
   Serial.print(",AY:");
-  Serial.print(ay);
+  Serial.print(ay_g);
   Serial.print(",BRK:");
   Serial.println("0 "); //change off ln for future use
 
