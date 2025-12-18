@@ -74,11 +74,11 @@ void loop() {
   //Serial.println(corrAngle);
   Serial.print("LEAN:"); 
   Serial.print(corrAngle);
-  Serial.print(",AX");
+  Serial.print(",AX:");
   Serial.print(ax);
-  Serial.print(",AY");
+  Serial.print(",AY:");
   Serial.print(ay);
-  Serial.print(",BRK");
+  Serial.print(",BRK:");
   Serial.println("0 "); //change off ln for future use
 
   //we do have a drift right now (very drunk while doing this) - at around 20 to 25 degrees, 5 degrees of drift is introducded...

@@ -28,13 +28,30 @@ IMAGE_DIR = "images/"
 SPLASH_IMAGE = IMAGE_DIR + "splash.jpg"
 BG_IMAGE = IMAGE_DIR + "mainback.jpg"
 
+
+
 #Arduino 1
 SERIAL_PORT1 = "COM6" #"dev/ttyUSB0"
 SERIAL_BAUD1 = 115200
+#ser_imu = serial.Serial(
+#    port=SERIAL_PORT1,
+#    baudrate=SERIAL_BAUD1,
+#    timeout=0.01
+#)
 
 #Arduino BTNs
 SERIAL_PORT2 = "COM3" #"dev/ttyUSB1"
 SERIAL_BAUD2 = 115200
+#ser_btn = serial.Serial(
+#    port=SERIAL_PORT2,
+#    baudrate=SERIAL_BAUD2,
+#    timeout=0.01
+#)
+
+#ser_imu.reset_input_buffer()
+#ser_btn.reset_input_buffer()
+
+
 #CAN Channel
 CAN_CHANNEL = "can0"
 CAN_BITRATE = 500000
@@ -90,9 +107,10 @@ tps = 0
 # IMU / Arduino variables
 imu_data = {
     "ax": 0, "ay": 0, "az": 0,
-    "brake": 0,
-    "lean": 0,
-    "pitch": 0
+    "gx": 0, "gy": 0, "gz": 0,
+    "mx": 0, "my": 0, "mz": 0,
+    "lean": 0, "pitch": 0,
+    "brake": 0
 }
 #y long
 #x lat
@@ -172,85 +190,74 @@ def process_can_frame(msg):
 # ============================================================
 
 def init_serial():
-    global serArdString
     try:
-        ser = serial.Serial(SERIAL_PORT1, SERIAL_BAUD1, timeout=0.1)
-        serArdString = "[SERIAL] Connected to Arduino."
-        print(serArdString)
+        ser = serial.Serial(
+            SERIAL_PORT1,
+            SERIAL_BAUD1,
+            timeout=0.01      # 🔑 MUCH smaller timeout
+        )
+        ser.reset_input_buffer()
+        print("[SERIAL] IMU connected")
         return ser
-    except:
-        serArdString = "[SERIAL ERROR] Could not connect."
-        print(serArdString)
+
+    except serial.SerialException as e:
+        print(f"[SERIAL ERROR] IMU failed: {e}")
         return None
 
 def init_button_serial():
-    global btn_serial, serBtnString
     try:
-        btn_serial = serial.Serial(SERIAL_PORT2, SERIAL_BAUD2, timeout=0.1)
-        serBtnString = "[SERIAL-BTN] Connected."
-        print(serBtnString)
+        ser = serial.Serial(
+            SERIAL_PORT2,
+            SERIAL_BAUD2,
+            timeout=0.01      # 🔑 same fix here
+        )
+        ser.reset_input_buffer()
+        print("[SERIAL-BTN] Connected")
+        return ser
+
     except serial.SerialException as e:
-        serBtnString = "[SERIAL-BTN ERROR] Could not connect: {e}"
-        print(serBtnString)
-        btn_serial = None
+        print(f"[SERIAL-BTN ERROR] Could not connect: {e}")
+        return None
+
 
 
 def read_serial(ser):
-    global rpm, speed, gear, coolant, iat, tps, imu_data
+    global imu_data
 
     if not ser:
         return
 
-    line = ser.readline().decode(errors='ignore').strip()
-    if not line:
+    latest_line = None
+
+    # 🔹 Read all available lines and keep only the latest
+    while ser.in_waiting:
+        try:
+            latest_line = ser.readline().decode(errors="ignore").strip()
+        except:
+            continue
+
+    if not latest_line:
         return
 
-    parts = line.split(",")
+    # 🔹 Only parse the four keys we care about
+    parts = latest_line.split(",")
     for p in parts:
         if ":" not in p:
             continue
         key, value = p.split(":", 1)
         try:
-            value = float(value) if "." in value else int(value)
+            value = float(value)
         except:
             continue
 
-        if key == "RPM":
-            rpm = value
-        elif key == "SPD":
-            speed = value
-        elif key == "GEAR":
-            gear = value
-        elif key == "THR":
-            tps = value
+        if key == "LEAN":
+            imu_data["lean"] = value
         elif key == "BRK":
             imu_data["brake"] = value
-        elif key == "CLT":
-            coolant = value
-        elif key == "IAT":
-            iat = value
-        elif key == "LEAN":
-            imu_data["lean"] = value
-        elif key == "PITCH":
-            imu_data["pitch"] = value
         elif key == "AX":
             imu_data["ax"] = value
         elif key == "AY":
             imu_data["ay"] = value
-        elif key == "AZ":
-            imu_data["az"] = value
-        elif key == "GX":
-            imu_data["gx"] = value
-        elif key == "GY":
-            imu_data["gy"] = value
-        elif key == "GZ":
-            imu_data["gz"] = value
-        elif key == "MX":
-            imu_data["mx"] = value
-        elif key == "MY":
-            imu_data["my"] = value
-        elif key == "MZ":
-            imu_data["mz"] = value
 
 def read_buttons():
     """
@@ -1115,8 +1122,8 @@ def draw_RTCtime():
 
 def main():
     bus = init_can()
-    ser_imu = init_serial()
-    init_button_serial()  # initialize button serial
+    ser_imu = init_serial()         # initialize ard
+    ser_btn = init_button_serial()  # initialize button serial #thius structure forces that code to use the data or ignore it completely
     show_splash()
     current_screen = 1
     running = True
