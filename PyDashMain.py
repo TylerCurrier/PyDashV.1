@@ -69,6 +69,9 @@ print("RTC Time:", current_time)
 # Example: print in a formatted nice way
 print("Formatted:", current_time.tm_year, current_time.tm_mon, current_time.tm_mday,
       current_time.tm_hour, current_time.tm_min, current_time.tm_sec)
+or newer 
+#print(f"{current_time.tm_hour:02d}:{current_time.tm_min:02d}")
+
 """
 
 # ============================================================
