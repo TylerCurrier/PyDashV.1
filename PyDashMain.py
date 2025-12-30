@@ -29,11 +29,11 @@ SPLASH_IMAGE = IMAGE_DIR + "splash.jpg"
 BG_IMAGE = IMAGE_DIR + "mainback.jpg"
 
 #Arduino 1
-SERIAL_PORT1 = "COM6" #"dev/ttyUSB0"
+SERIAL_PORT1 = "/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.2:1.0-port0" #"COM6" on windows
 SERIAL_BAUD1 = 115200
 
 #Arduino BTNs
-SERIAL_PORT2 = "COM3" #"dev/ttyUSB1"
+SERIAL_PORT2 = "/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.3:1.0-port0" #"COM3" on windows
 SERIAL_BAUD2 = 115200
 
 #CAN Channel
