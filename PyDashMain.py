@@ -33,7 +33,7 @@ SERIAL_PORT1 = "/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-
 SERIAL_BAUD1 = 115200
 
 #Arduino BTNs
-SERIAL_PORT2 = "/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.3:1.0-port0" #"COM3" on windows
+SERIAL_PORT2 = "COM3" #"/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.3:1.0-port0" #"COM3" on windows
 SERIAL_BAUD2 = 115200
 
 #CAN Channel

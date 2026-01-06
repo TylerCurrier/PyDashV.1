@@ -22,7 +22,7 @@ def main():
     print("Press CTRL+C to stop.\n")
 
     try:
-        bus = can.interface.Bus(channel=CAN_CHANNEL, bustype='socketcan')
+        bus = can.interface.Bus(channel=CAN_CHANNEL, interface='socketcan')
     except Exception as e:
         print("ERROR: Could not connect to CAN bus:", e)
         return
