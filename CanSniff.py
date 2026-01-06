@@ -1,6 +1,6 @@
 #CAN Input Sniffing tool for setting up main code
 
-"""f
+"""
 CAN Sniffer Tool for Raspberry Pi
 --------------------------------
 Use this to discover:
